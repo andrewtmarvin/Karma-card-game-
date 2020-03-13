@@ -3,16 +3,24 @@ export class Card {
 		this.type = type;
 		this.suit = suit;
 		this.value = this.getValue(type);
-		this.title = `${type} of ${suit}`;
+		this.title = this.getTitle(type);
 	}
 
-	getValue (type) {
-		if ([ '2', '3', '10', 'Joker' ].includes(type) === true) {
+	getValue () {
+		if ([ '2', '3', '10', 'Joker' ].includes(this.type) === true) {
 			return undefined;
-		} else if ([ 'Jack', 'Queen', 'King', 'Ace' ].includes(type) === true) {
-			return [ 'Jack', 'Queen', 'King', 'Ace' ].indexOf(type) + 11;
+		} else if ([ 'Jack', 'Queen', 'King', 'Ace' ].includes(this.type) === true) {
+			return [ 'Jack', 'Queen', 'King', 'Ace' ].indexOf(this.type) + 11;
 		} else {
-			return parseInt(type);
+			return parseInt(this.type);
+		}
+	}
+
+	getTitle () {
+		if (this.type !== 'Joker') {
+			return `${this.type} of ${this.suit}`;
+		} else {
+			return `${this.suit} ${this.type}`;
 		}
 	}
 }

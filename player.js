@@ -3,18 +3,20 @@ export class Player {
 		this.name = name;
 		this.cards = [ [], [], [] ];
 	}
+
 	playCard () {
-		this.cards.forEach((card) => {
-			console.log(`${this.name} has played card ${card}.`);
-		});
+		console.log(`a card is played by ${this.name}.`);
 	}
+
 	drawCard () {
-		console.log('a card is drawn.');
 		this.cards[0].push(card);
+		console.log('a card is drawn.');
 	}
+
 	pickUpDeck () {
 		console.log('a deck is picked up.');
 	}
+
 	swapCards () {
 		console.log('some cards are swapped.');
 	}

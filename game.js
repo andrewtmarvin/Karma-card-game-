@@ -22,7 +22,7 @@ export class Game {
 				this.deck.push(new Card(type, suit));
 			});
 		});
-		this.deck = this.deck.concat([ 'Black Joker', 'Red Joker' ]);
+		this.deck = this.deck.concat([ new Card('Joker', 'Red'), new Card('Joker', 'Black') ]);
 	}
 
 	shuffleDeck () {
@@ -31,7 +31,6 @@ export class Game {
 			this.shuffledDeck.push(this.deck[Math.floor(Math.random() * 54)]);
 		}
 		this.deck = this.shuffledDeck;
-		console.log(this.shuffledDeck);
 	}
 
 	dealCards () {
@@ -40,5 +39,23 @@ export class Game {
 				player.cards[i] = this.deck.splice(0, 3);
 			}
 		});
+	}
+
+	allowCardSwap () {
+		this.players.forEach((player) => {
+			console.log(`${player.name}'s hand:`);
+			player.cards[0].forEach((card) => console.log(card.type));
+			console.log(`${player.name}'s showing cards:`);
+			player.cards[1].forEach((card) => console.log(card.type));
+			if (prompt('want to swap?') === 'yes') {
+				player.swapCards();
+			} else {
+				console.log('a card is not swapped.');
+			}
+		});
+	}
+
+	gameBegin () {
+		console.log('a game is begun.');
 	}
 }
