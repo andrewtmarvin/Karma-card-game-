@@ -1,7 +1,21 @@
-.blue {
-	color: blue;
+header {
+	background-color: cornflowerblue;
+	height: 100px;
 }
-.green {
-	color: green;
-	background-color: fuchsia;
+
+#main-window {
+	background-color: darkgrey;
+	min-height: 50vh;
+}
+
+.player-space {
+	background-color: darkkhaki;
+	height: 500px;
+	width: 40vw;
+	display: inline-block;
+}
+
+footer {
+	background-color: cornflowerblue;
+	height: 100px;
 }
