@@ -10,7 +10,7 @@ export class Card {
 		if ([ '2', '3', '10', 'Joker' ].includes(this.type) === true) {
 			return undefined;
 		} else if ([ 'Jack', 'Queen', 'King', 'Ace' ].includes(this.type) === true) {
-			return [ 'Jack', 'Queen', 'King', 'Ace' ].indexOf(this.type) + 11;
+			return [ 'Jack', 'Queen', 'King', 'Ace' ].indexOf(this.type) + 10;
 		} else {
 			return parseInt(this.type);
 		}
