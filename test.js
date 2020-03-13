@@ -1,5 +1,5 @@
 import { Game } from './game.js';
-let game1 = new Game();
+const game1 = new Game();
 game1.makePlayers(prompt('how many players?'));
 game1.makeDeck();
 game1.shuffleDeck();

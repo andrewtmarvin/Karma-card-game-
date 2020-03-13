@@ -1,4 +1,5 @@
 import { Player } from './player.js';
+import { Card } from './card.js';
 
 export class Game {
 	constructor () {
@@ -14,11 +15,11 @@ export class Game {
 	}
 
 	makeDeck () {
-		this.nums = [ '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace' ];
+		this.types = [ '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace' ];
 		this.suits = [ 'Hearts', 'Diamonds', 'Clubs', 'Spades' ];
-		this.nums.forEach((num) => {
+		this.types.forEach((type) => {
 			this.suits.forEach((suit) => {
-				this.deck.push(`${num} of ${suit}`);
+				this.deck.push(new Card(type, suit));
 			});
 		});
 		this.deck = this.deck.concat([ 'Black Joker', 'Red Joker' ]);
@@ -30,6 +31,7 @@ export class Game {
 			this.shuffledDeck.push(this.deck[Math.floor(Math.random() * 54)]);
 		}
 		this.deck = this.shuffledDeck;
+		console.log(this.shuffledDeck);
 	}
 
 	dealCards () {
