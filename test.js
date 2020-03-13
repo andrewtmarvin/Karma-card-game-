@@ -1,8 +1,7 @@
 import { Game } from './game.js';
-let numPlayers = prompt('how many players?');
-let game1 = new Game(numPlayers);
+let game1 = new Game();
+game1.makePlayers(prompt('how many players?'));
 game1.makeDeck();
 game1.shuffleDeck();
 game1.dealCards();
-console.log(game1.shuffledDeck);
-console.log(game1.players[1]);
+game1.players[0].swapCards();

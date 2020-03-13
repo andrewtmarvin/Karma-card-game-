@@ -15,5 +15,7 @@ export class Player {
 	pickUpDeck () {
 		console.log('a deck is picked up.');
 	}
-	swapCards () {}
+	swapCards () {
+		console.log('some cards are swapped.');
+	}
 }
