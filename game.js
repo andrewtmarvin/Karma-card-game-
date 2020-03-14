@@ -94,17 +94,36 @@ export class Game {
 			if (playerStarterStatus.indexOf(true) !== playerStarterStatus.lastIndexOf(true)) {
 				let x = [];
 				while (playerStarterStatus.length !== 0) {
-					let y = playerStarterStatus.pop();
-					if (y == true) {
+					if (playerStarterStatus.pop() == true) {
 						x.push(this.players[playerStarterStatus.length]);
 					}
 				}
+				// counter and x have corresponding indexes
 				let counter = Array.from({ length: x.length }).fill(0);
-				// continue here...
+				// Counts how many duplicates of the decidingValue card a player has
+				x.forEach((player) => {
+					for (let i = 0; i < 2; i++) {
+						for (let j = 0; j < 3; j++) {
+							if (player.cards[i][j].type === decidingValue.toString()) {
+								counter[x.indexOf(player)] += 1;
+							}
+						}
+					}
+				});
+				// If one player has a higher count of the decidingValue card, they are chosen
+				let highestCount = Math.max(...counter);
+				if (counter.indexOf(highestCount) === counter.lastIndexOf(highestCount)) {
+					console.log(`one player has more of the decidingValue card ${decidingValue}`);
+					return x[counter.indexOf(highestCount)].name;
+				} else {
+					console.log(
+						`players have the same number of decidingValue card ${decidingValue}, continue to next round...`
+					);
+				}
 			}
 
 			decidingValue++;
-			// If no players are marked true, i.e. nobody has a "3" in the first round, all are marked true before start of the next "4" round.
+			// Only runs if none are true, so if two are true, only they will continue to the next round.
 			if (playerStarterStatus.indexOf(true) === -1) {
 				playerStarterStatus = Array.from({ length: this.numPlayers }).fill(true);
 			}
