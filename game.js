@@ -6,6 +6,7 @@ export class Game {
 		this.numPlayers = null;
 		this.deck = [];
 		this.players = [];
+		this.gameOver = false;
 	}
 
 	makePlayers (numPlayers) {
@@ -28,10 +29,10 @@ export class Game {
 
 	shuffleDeck () {
 		this.shuffledDeck = [];
-		for (let i = 0; i < 53; i++) {
-			this.shuffledDeck.push(this.deck[Math.floor(Math.random() * 54)]);
+		while (this.deck.length > 0) {
+			this.shuffledDeck.push(...this.deck.splice(Math.floor(Math.random() * this.deck.length), 1));
 		}
-		this.deck = this.shuffledDeck;
+		this.deck = [ ...this.shuffledDeck ];
 	}
 
 	dealCards () {
