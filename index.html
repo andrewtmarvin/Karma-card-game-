@@ -2,12 +2,14 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <title>Karma Palace</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Righteous&display=swap" rel="stylesheet">
 </head>
 <body class="page-layout">
     <header class="header">
         <div class="header__title">
-            <h1 class="KP-title">Let's play Karma Palace</h1>
-            <p class="KP-subtitle">Legendary Underground Backpacker Game</p>
+            <h1 class="header__title-main">Let's play Karma Palace</h1>
+            <p class="header__title-sub">Legendary Backpacker Card Game</p>
         </div>
         <div class="header__connect">
             <p class="room-ID">This room's ID: D9KL3</p>
@@ -19,6 +21,42 @@
         </div>
     </header>
     <main class='game-area'>
+        <div class='player-space player-2 opponent' id='player2'>
+            <div class="opponent__name">
+                Waiting for player 2 to join...
+            </div>
+            <div class="opponent__hand">
+                HAND: ? ? ? 
+            </div>
+            <div class="opponent__cards">
+                <p>FACE DOWN: ? ? ? </p>
+                <p>FACE UP: ace 7 king</p>
+            </div>
+        </div>
+        <div class='player-space player-3 opponent' id='player3'>
+            <div class="opponent__name">
+                Waiting for player 3 to join...
+            </div>
+            <div class="opponent__hand">
+                HAND: ? ? ? 
+            </div>
+            <div class="opponent__cards">
+                <p>FACE UP: 7 3 jack</p>
+                <p>FACE DOWN: ? ? ? </p>
+            </div>
+        </div>
+        <div class='player-space player-4 opponent' id='player4'>
+            <div class="opponent__name">
+                Waiting for player 4 to join...
+            </div>
+            <div class="opponent__hand">
+                HAND: ? ? ? 
+            </div>
+            <div class="opponent__cards">
+                <p>FACE UP: ace 7 king</p>
+                <p>FACE DOWN: ? ? ? </p>
+            </div>
+        </div>
         <div class="play-area">
             <div class="play-area__deck">
                 deck
@@ -33,10 +71,15 @@
                 cards burned: 15
             </div>
         </div>
-        <div class='player-space player-1' id='player1'>You</div>
-        <div class='player-space player-2' id='player2'>Waiting for player 2</div>
-        <div class='player-space player-3' id='player3'>Waiting for player 3</div>
-        <div class='player-space player-4' id='player4'>Waiting for player 4</div>
+        <div class='player-space player-1' id='player1'>
+            <div class="player-space__cards">
+                <p>FACE UP: ace 7 king</p>
+                <p>FACE DOWN: ? ? ? </p>
+            </div>
+            <div class="player-space__hand">
+                HAND: 5 10 8
+            </div>
+        </div>
     </main>
     <footer class="footer">
         <script type='module' src="main.js"></script> 

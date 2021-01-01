@@ -7,8 +7,6 @@
 	grid-template-columns: repeat(3, 1fr);
 }
 
-.player-space {
-}
 .play-area {
 	grid-row: 2 / 3;
 	grid-column: 1 / -1;
@@ -35,6 +33,7 @@
 
 .player-1 {
 	background-color: orange;
+	justify-content: flex-end;
 	grid-row: 2 / 4;
 	grid-column: 1 / -1;
 	padding: 10rem;
@@ -61,4 +60,28 @@
 .player-5 {
 	grid-row: 1 / 2;
 	grid-column: 5 / 6;
+}
+
+.player-space {
+	display: flex;
+	align-items: center;
+	flex-flow: wrap column;
+	padding: 2rem;
+	&__cards {
+	}
+	&__hand {
+		justify-self: flex-end;
+	}
+}
+
+.opponent {
+	justify-content: center;
+	&__name {
+		align-self: flex-start;
+		margin-bottom: auto;
+	}
+	&__cards {
+	}
+	&__hands {
+	}
 }

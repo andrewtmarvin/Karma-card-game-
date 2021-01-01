@@ -23,7 +23,7 @@ body {
 	height: 100vh;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	grid-template-rows: [header-start] 20rem [header-end main-start] 1fr [main-end];
+	grid-template-rows: [header-start] 10rem [header-end main-start] 1fr [main-end];
 }
 
 .header {
@@ -37,6 +37,13 @@ body {
 	&__title {
 		width: 100%;
 		text-align: center;
+		&-main {
+			font-family: 'Righteous', cursive;
+			font-size: 2.5rem;
+		}
+		&-sub {
+			font-size: 1.5rem;
+		}
 	}
 	&__connect {
 		justify-self: flex-end;

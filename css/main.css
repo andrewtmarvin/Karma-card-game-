@@ -28,8 +28,8 @@ body {
   display: grid;
   -ms-grid-columns: (1fr)[2];
       grid-template-columns: repeat(2, 1fr);
-  -ms-grid-rows: [header-start] 20rem [header-end main-start] 1fr [main-end];
-      grid-template-rows: [header-start] 20rem [header-end main-start] 1fr [main-end];
+  -ms-grid-rows: [header-start] 10rem [header-end main-start] 1fr [main-end];
+      grid-template-rows: [header-start] 10rem [header-end main-start] 1fr [main-end];
 }
 
 .header {
@@ -50,6 +50,15 @@ body {
 .header__title {
   width: 100%;
   text-align: center;
+}
+
+.header__title-main {
+  font-family: 'Righteous', cursive;
+  font-size: 2.5rem;
+}
+
+.header__title-sub {
+  font-size: 1.5rem;
 }
 
 .header__connect {
@@ -101,6 +110,9 @@ body {
 
 .player-1 {
   background-color: orange;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
   -ms-grid-row: 2;
   -ms-grid-row-span: 2;
   grid-row: 2 / 4;
@@ -145,5 +157,35 @@ body {
   -ms-grid-column: 5;
   -ms-grid-column-span: 1;
   grid-column: 5 / 6;
+}
+
+.player-space {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: wrap column;
+          flex-flow: wrap column;
+  padding: 2rem;
+}
+
+.player-space__hand {
+  justify-self: flex-end;
+}
+
+.opponent {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.opponent__name {
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+  margin-bottom: auto;
 }
 /*# sourceMappingURL=main.css.map */
