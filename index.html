@@ -5,9 +5,17 @@
 </head>
 <body class="page-layout">
     <header class="header">
-        <div>
+        <div class="header__title">
             <h1 class="KP-title">Let's play Karma Palace</h1>
             <p class="KP-subtitle">Legendary Underground Backpacker Game</p>
+        </div>
+        <div class="header__connect">
+            <p class="room-ID">This room's ID: D9KL3</p>
+            <form action="submit" method="post">
+                <label for="roomID"></label>
+                <input name="roomID" type="text" class="text">
+                <button type="submit" class="connect-">Connect</button>
+            </form>
         </div>
     </header>
     <main class='game-area'>
@@ -25,10 +33,10 @@
                 cards burned: 15
             </div>
         </div>
-        <div class='player-space player-1' id='player1'>Player 1</div>
-        <div class='player-space player-2' id='player2'>Player 2</div>
-        <div class='player-space player-3' id='player3'>Player 3</div>
-        <div class='player-space player-4' id='player4'>Player 4</div>
+        <div class='player-space player-1' id='player1'>You</div>
+        <div class='player-space player-2' id='player2'>Waiting for player 2</div>
+        <div class='player-space player-3' id='player3'>Waiting for player 3</div>
+        <div class='player-space player-4' id='player4'>Waiting for player 4</div>
     </main>
     <footer class="footer">
         <script type='module' src="main.js"></script> 

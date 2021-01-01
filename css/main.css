@@ -34,8 +34,26 @@ body {
 
 .header {
   background-color: cornflowerblue;
-  grid-row: header-start header-end;
+  grid-row: header-start / header-end;
   grid-column: 1 / -1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: wrap column;
+          flex-flow: wrap column;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.header__title {
+  width: 100%;
+  text-align: center;
+}
+
+.header__connect {
+  justify-self: flex-end;
 }
 
 .game-area {

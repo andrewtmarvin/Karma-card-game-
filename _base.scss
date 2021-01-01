@@ -28,6 +28,17 @@ body {
 
 .header {
 	background-color: cornflowerblue;
-	grid-row: header-start header-end;
+	grid-row: header-start / header-end;
 	grid-column: 1 / -1;
+	display: flex;
+	flex-flow: wrap column;
+	justify-content: space-around;
+
+	&__title {
+		width: 100%;
+		text-align: center;
+	}
+	&__connect {
+		justify-self: flex-end;
+	}
 }
