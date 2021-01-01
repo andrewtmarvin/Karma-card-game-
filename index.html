@@ -1,19 +1,36 @@
 <head>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <title>Karma Palace</title>
 </head>
-<body>
-    <header>
+<body class="page-layout">
+    <header class="header">
         <div>
-            <h1>Let's play Karma Palace</h1>
+            <h1 class="KP-title">Let's play Karma Palace</h1>
+            <p class="KP-subtitle">Legendary Underground Backpacker Game</p>
         </div>
     </header>
-    <div id='main-window'>
-        <div class='player-space' id='player1'></div>
-        <div class='player-space' id='player2'></div>
-        <div class='player-space' id='player3'></div>
-        <div class='player-space' id='player4'></div>
-    </div>
-    <footer>
+    <main class='game-area'>
+        <div class="play-area">
+            <div class="play-area__deck">
+                deck
+                cards remaining: 10
+            </div>
+            <div class="play-area__pile">
+                pile
+                Ace
+            </div>
+            <div class="play-area__burned">
+                burned
+                cards burned: 15
+            </div>
+        </div>
+        <div class='player-space player-1' id='player1'>Player 1</div>
+        <div class='player-space player-2' id='player2'>Player 2</div>
+        <div class='player-space player-3' id='player3'>Player 3</div>
+        <div class='player-space player-4' id='player4'>Player 4</div>
+    </main>
+    <footer class="footer">
         <script type='module' src="main.js"></script> 
     </footer>
 </body>

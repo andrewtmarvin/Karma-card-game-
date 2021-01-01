@@ -1,0 +1,131 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+html {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.page-layout {
+  height: 100vh;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[2];
+      grid-template-columns: repeat(2, 1fr);
+  -ms-grid-rows: [header-start] 20rem [header-end main-start] 1fr [main-end];
+      grid-template-rows: [header-start] 20rem [header-end main-start] 1fr [main-end];
+}
+
+.header {
+  background-color: cornflowerblue;
+  grid-row: header-start header-end;
+  grid-column: 1 / -1;
+}
+
+.game-area {
+  background-color: darkgrey;
+  grid-row: main-start / main-end;
+  grid-column: 1 / -1;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 30% 30% 40%;
+      grid-template-rows: 30% 30% 40%;
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
+}
+
+.play-area {
+  -ms-grid-row: 2;
+  -ms-grid-row-span: 1;
+  grid-row: 2 / 3;
+  grid-column: 1 / -1;
+  z-index: 100;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+}
+
+.play-area__deck {
+  height: 100px;
+  width: 100px;
+  background-color: green;
+}
+
+.play-area__pile {
+  height: 100px;
+  width: 100px;
+  background-color: purple;
+}
+
+.play-area__burned {
+  height: 100px;
+  width: 100px;
+  background-color: brown;
+}
+
+.player-1 {
+  background-color: orange;
+  -ms-grid-row: 2;
+  -ms-grid-row-span: 2;
+  grid-row: 2 / 4;
+  grid-column: 1 / -1;
+  padding: 10rem;
+}
+
+.player-2 {
+  background-color: darkkhaki;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1 / 2;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1 / 2;
+}
+
+.player-3 {
+  background-color: goldenrod;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1 / 2;
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 1;
+  grid-column: 2 / 3;
+}
+
+.player-4 {
+  background-color: burlywood;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1 / 2;
+  -ms-grid-column: 3;
+  -ms-grid-column-span: 1;
+  grid-column: 3 / 4;
+}
+
+.player-5 {
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1 / 2;
+  -ms-grid-column: 5;
+  -ms-grid-column-span: 1;
+  grid-column: 5 / 6;
+}
+/*# sourceMappingURL=main.css.map */
