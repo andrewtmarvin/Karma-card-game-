@@ -1,7 +1,7 @@
-import { Player } from './player.js';
-import { Card } from './card.js';
+const Player = require('./player.js');
+const Card = require('./card.js');
 
-export class Game {
+module.exports = class Game {
 	constructor () {
 		this.numPlayers = null;
 		this.deck = [];
@@ -12,7 +12,7 @@ export class Game {
 	makePlayers (numPlayers) {
 		this.numPlayers = numPlayers;
 		for (let i = 0; i < numPlayers; i++) {
-			this.players.push(new Player(prompt(`Enter player ${i + 1}'s name: `)));
+			this.players.push(new Player('player ' + (i+1)));
 		}
 	}
 

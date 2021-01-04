@@ -1,4 +1,4 @@
-export class Card {
+module.exports = class Card {
 	constructor (type, suit) {
 		this.type = type;
 		this.suit = suit;
