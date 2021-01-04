@@ -4,7 +4,10 @@ const path = require('path');
 
 // Initial page load
 app.get('/', (req, res) => {
-    generateRoom();
+    const hostRoom = generateRoom();
+    console.log(`Room created with ID ${hostRoom.roomID}`)
+    numPlayers = 4;
+    hostRoom.newGame(numPlayers);
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
@@ -47,11 +50,10 @@ app.listen(3004, ()=>{
 function generateRoom() {
     const Room = require('./room.js');
     const userRoom = new Room(generateRoomID());
-    userRoom.newGame(4);
-
+    return userRoom;
     // Function generates unique room ID
     function generateRoomID() {
-        'DF934L';
+        return Math.random().toString(36).substr(2, 5).toUpperCase();
     }    
 }
 
