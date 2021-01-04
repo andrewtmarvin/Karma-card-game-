@@ -11,3 +11,4 @@ Client side (this file) to do:
 - Update UI (game has begun, whose turn it is, cards displayed)
 
 */
+console.log('hooked up and running!');

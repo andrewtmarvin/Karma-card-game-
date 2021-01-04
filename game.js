@@ -1,6 +1,14 @@
 const Player = require('./player.js');
 const Card = require('./card.js');
 
+/*
+To do:
+- 
+*/
+
+// Static variable declaration
+let prevLoser = "";
+
 module.exports = class Game {
 	constructor () {
 		this.numPlayers = null;
