@@ -83,6 +83,8 @@ module.exports = class Game {
 		let playerStarterStatus = Array.from({ length: this.numPlayers }).fill(true);
 		// While loops breaks when only one player is marked as true, meaning they will go first.
 		while (playerStarterStatus.indexOf(true) !== playerStarterStatus.lastIndexOf(true)) {
+			// Keeps track of starter status from the beginning of the round
+			let roundStartValues = [...playerStarterStatus];
 			this.players.forEach((player) => {
 				// playerIndex corresponds with a player's index location in both the playerStarterStatus and this.players arrays.
 				let playerIndex = this.players.indexOf(player);
@@ -99,6 +101,8 @@ module.exports = class Game {
 					}
 				}
 			});
+			// Needed for resetting playerStarterStatus after items popped in the following if statement
+			let updatedPlayerStarterStatus = [...playerStarterStatus];
 			// If more than one player has a decidingValue card but one player has more copies of it, they are chosen
 			if (playerStarterStatus.indexOf(true) !== playerStarterStatus.lastIndexOf(true)) {
 				let x = [];
@@ -107,6 +111,7 @@ module.exports = class Game {
 						x.push(this.players[playerStarterStatus.length]);
 					}
 				}
+				playerStarterStatus = [...updatedPlayerStarterStatus];
 				// counter and x have corresponding indexes
 				let counter = Array.from({ length: x.length }).fill(0);
 				// Counts how many duplicates of the decidingValue card a player has
@@ -131,11 +136,14 @@ module.exports = class Game {
 				}
 			}
 
-			decidingValue++;
-			// Only runs if none are true, so if two are true, only they will continue to the next round.
+			// Only runs if none are true. Resets values to how they were at the start of this loop.
+			// If two are true, only those players will continue to the next round.
 			if (playerStarterStatus.indexOf(true) === -1) {
-				playerStarterStatus = Array.from({ length: this.numPlayers }).fill(true);
+				playerStarterStatus = [...roundStartValues];
+				console.log(`No round winner for value ${decidingValue}, continue to the next round...`)
 			}
+
+			decidingValue++;
 		}
 		return this.players[playerStarterStatus.indexOf(true)].name;
 	}
