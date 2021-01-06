@@ -2,10 +2,12 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
+const { connect } = require('tls');
 
 app.use(bodyParser.json()); 
 
 const rooms = {};
+const users = {};
 
 // Initial page load
 app.get('/', (req, res) => {
@@ -19,13 +21,6 @@ app.get('/roomSetUp', (req, res) => {
     res.send(hostRoom.roomID);
 })
 
-app.get('/joinStatus', (req, res) =>{
-    const {roomID, numPlayers} = req.body;
-    setTimeout(()=> {
-        res.send(rooms[roomID].roomSetupComplete);
-    }, 1000);
-});
-
 app.post('/join', (req, res) => {
     // If regarding players joined
     // Add/ remove player from room
@@ -37,10 +32,7 @@ app.post('/join', (req, res) => {
         res.send(roomIDField);
     } else {
         res.send("a room is not found");
-    }
-
-    
-    
+    } 
 });
 
 // Host begins game
@@ -54,14 +46,27 @@ app.post('/begin', (req, res) => {
     
 });
 
-app.post('/gameStatus', (req, res) => {
-    // always looping and waiting for promise to resolve on client
-});
-
 app.post('/gameAction', (req, res) => {
     // Game logic
     // Return game status promise
-    
+});
+
+app.get('/roomStatus', (req, res) =>{
+    const {roomID} = req.query;
+    if (rooms[roomID]!=null) {
+        try {
+            const room = rooms[roomID];
+            res.json(rooms[roomID].getRoomStatus());
+        }
+        catch (error) {
+            res.send(error);
+        }
+    }
+});
+
+app.post('/gameStatus', (req, res) => {
+    const {roomID} = req.query;
+    return rooms[roomID].getGameStatus();
 });
 
 app.use(express.static(__dirname));
@@ -85,20 +90,10 @@ app.listen(3004, ()=>{
 
 function generateRoom() {
     const Room = require('./room.js');
-    const userRoom = new Room(generateRoomID());
+    const userRoom = new Room(generateID());
     return userRoom;
     // Function generates unique room ID
-    function generateRoomID() {
+    function generateID() {
         return Math.random().toString(36).substr(2, 5).toUpperCase();
     }    
 }
-
-
-
-
-/*
-Server side to do:
-- When user opens page, ajax call -> instantiate room object with unique room code -> displays on page
-- When user tries to connect to another room, ajax call -> adds user to game and return players joined promise to all users -> update UI
-- When host clicks start, return players joined promise with loop end flag begin game logic 
-*/

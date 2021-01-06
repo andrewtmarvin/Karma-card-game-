@@ -4,45 +4,13 @@ this is where client js is located
 
 Client side (this file) to do:
 - Loop over promise which asks server how many players have joined room
-- When anyone joins, connect button turns to start button
+- When more than one player in room, join field and button disappear
+- Start button only works if game full and user is host
 - When host clicks start, tell server to begin game
-- Receive players joined promise with loop end flag from server
-- Begin loop over game status promise which asks server for game status
 - Update UI (game has begun, whose turn it is, cards displayed)
 
 */
-
-
-// players joined promise
-let joinRoomComplete = false;
-
-const checkJoinedStatus = () => {
-    console.log(userID);
-    axios.get('./joinStatus', {
-        userID,
-        roomIDField : document.querySelector('#roomID-field').value
-    })
-    .then(response =>{
-        console.log(response.data);
-        if (response.data.complete == true) {
-            joinRoomComplete = true;
-        } else {
-            checkJoinedStatus()
-        }
-    })
-    .catch(error => {
-        console.log(error);
-    })
-}
-
-
-
-
-// game status promise
-let gameStatusEnded = false;
-
-
-
+        
 const joinBtn = document.querySelector("#join-room");
 joinBtn.addEventListener('submit', (e) =>{
     e.preventDefault();
@@ -73,17 +41,42 @@ beginBtn.addEventListener('click', (e) => {
     })
     console.log('a game is begun');
 })
-
+        
 // Set up room, asign client a user ID which is also its starting room ID
 window.addEventListener('load', () => {
     axios.get('/roomSetUp')
     .then(response => {
         document.querySelector('#roomID').innerText = response.data;
         window.userID = response.data;
-
-        checkJoinedStatus();
+        window.roomID = response.data;
     })
     .catch(error => {
-        console.log("failed to set up room");
+        console.log("failed to set up room"+ error);
     })
-  });
+});
+
+let gameBegun = false;
+// Main loop
+setTimeout(
+    setInterval(()=> {
+        if (gameBegun == false) {
+            console.log("getting room status");
+            axios.get('./roomStatus', {
+                params: {
+                    roomID
+                }
+            })
+            .then(res => {
+                if (res.data) {
+                    const responseData = res.data;
+                    console.log(responseData);
+                    gameBegun = true;
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        } else {
+            console.log("getting game status");
+        }
+    }, 2000), 1000);

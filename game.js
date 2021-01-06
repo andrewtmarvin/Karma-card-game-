@@ -147,4 +147,7 @@ module.exports = class Game {
 		}
 		return this.players[playerStarterStatus.indexOf(true)].name;
 	}
+	getGameStatus() {
+		return 'game status: ';
+	}
 }

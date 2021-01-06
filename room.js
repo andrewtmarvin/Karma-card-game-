@@ -1,9 +1,9 @@
 const Game = require('./game.js');
 
 module.exports = class Room {
-    constructor(roomID) {
-        this.roomID = roomID;
-        this.curUsers = ['host', ];
+    constructor(ID) {
+        this.roomID = ID;
+        this.curUsers = [ID, ];
         this.curGame = null;
         this.prevLoser = null;
         this.roomSetupComplete = false;
@@ -35,5 +35,15 @@ module.exports = class Room {
         
         // Game start
         this.curGame.gameBegin();
+    }
+
+    getRoomStatus() {
+        return {
+            roomID: this.roomID,
+            curUsers: this.curUsers,
+            curGame: this.curGame,
+            prevLoser: this.prevLoser,
+            roomSetupComplete: this.roomSetupComplete
+        };
     }
 }
