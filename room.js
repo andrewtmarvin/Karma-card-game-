@@ -16,20 +16,20 @@ module.exports = class Room {
 
     userJoin(newUser) {
         // Add user to this room
-        this.curUsers.add(newUser);
+        this.curUsers.push(newUser);
     }
 
     newGame(numPlayers) {
         // Game setup
-        const game1 = new Game();
+        this.curGame = new Game();
         
-        game1.makePlayers(numPlayers);
-        game1.makeDeck();
-        game1.shuffleDeck();
-        game1.dealCards();
-        game1.allowCardSwap();
+        this.curGame.makePlayers(numPlayers);
+        this.curGame.makeDeck();
+        this.curGame.shuffleDeck();
+        this.curGame.dealCards();
+        this.curGame.allowCardSwap();
         
         // Game start
-        game1.gameBegin();
+        this.curGame.gameBegin();
     }
 }

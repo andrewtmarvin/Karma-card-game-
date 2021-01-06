@@ -1,31 +1,61 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json()); 
+
+const rooms = {};
 
 // Initial page load
 app.get('/', (req, res) => {
-    const hostRoom = generateRoom();
-    console.log(`Room created with ID ${hostRoom.roomID}`)
-    numPlayers = 4;
-    hostRoom.newGame(numPlayers);
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+
+app.get('/roomSetUp', (req, res) => {
+    const hostRoom = generateRoom();
+    rooms[hostRoom.roomID] = hostRoom;
+    res.send(hostRoom.roomID);
+})
+
 // Ajax requests
-app.post('/', (req, res) => {
+app.post('/join', (req, res) => {
     // If regarding players joined
     // Add/ remove player from room
+    // Delete room user is leaving from rooms
     // Return players joined promise
+    const {userID, roomIDField} = req.body;
+    if (rooms[roomIDField] != null) {
+        rooms[roomIDField].userJoin(userID);
+        res.send(roomIDField);
+    } else {
+        res.send("a room is not found");
+    }
 
+    
+    
+});
+
+app.post('/begin', (req, res) => {
     // If host clicked begin game
-    // Return players joined promise with end flag
+    const {roomID, numPlayers} = req.body;
     // Start game
+    rooms[roomID].newGame(numPlayers);
+    // Return players joined promise with end flag
+    res.send('started');
     // Return game status promise
+    
+});
 
-    // If regarding a player's move
+app.post('/gameStatus', (req, res) => {
+    // always looping and waiting for promise to resolve on client
+});
+
+app.post('/gameAction', (req, res) => {
     // Game logic
     // Return game status promise
-    res.send('data');
+    
 });
 
 app.use(express.static(__dirname));
@@ -33,19 +63,19 @@ app.use(express.static(__dirname));
 // Simulating 4 concurrent users
 app.listen(3001, ()=>{
     console.log('listening for user 1');
-})
+});
 
 app.listen(3002, ()=>{
     console.log('listening for user 2');
-})
+});
 
 app.listen(3003, ()=>{
     console.log('listening for user 3');
-})
+});
 
 app.listen(3004, ()=>{
     console.log('listening for user 4');
-})
+});
 
 function generateRoom() {
     const Room = require('./room.js');

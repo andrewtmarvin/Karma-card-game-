@@ -8,15 +8,15 @@
 <body class="page-layout">
     <header class="header">
         <div class="header__title">
-            <h1 class="header__title-main">Let's play Karma Palace</h1>
+            <h1 class="header__title-main">Let's play Karma Palace<button class="btn" id="begin-game">Begin!</button></h1>
             <p class="header__title-sub">Legendary Backpacker Card Game</p>
         </div>
         <div class="header__connect">
-            <p class="room-ID">This room's ID: D9KL3</p>
-            <form action="submit" method="post">
-                <label for="roomID"></label>
-                <input name="roomID" type="text" class="text">
-                <button type="submit" class="connect-">Connect</button>
+            <p class="room-ID">This room's ID: <span id="roomID"></span></p>
+            <form action="submit" method="post" id="join-room">
+                <label for="roomID-field"></label>
+                <input name="roomID-field" id="roomID-field" type="text" class="text">
+                <button type="submit" class="">Connect</button>
             </form>
         </div>
     </header>
@@ -83,5 +83,6 @@
     </main>
     <footer class="footer">
         <script type='module' src="index.js"></script> 
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     </footer>
 </body>
