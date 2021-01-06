@@ -6,12 +6,14 @@ module.exports = class Room {
         this.curUsers = ['host', ];
         this.curGame = null;
         this.prevLoser = null;
+        this.roomSetupComplete = false;
     }
 
     joinOtherRoom(otherRoomID) {
         // Update UI (remove buttons since not the host, begin game status promise loop)
         console.log(`joining room ${otherRoomID}...`);
         // Destroy this room object
+        
     }
 
     userJoin(newUser) {
@@ -20,6 +22,8 @@ module.exports = class Room {
     }
 
     newGame(numPlayers) {
+        this.roomSetupComplete = true;
+
         // Game setup
         this.curGame = new Game();
         

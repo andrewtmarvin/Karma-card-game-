@@ -19,7 +19,13 @@ app.get('/roomSetUp', (req, res) => {
     res.send(hostRoom.roomID);
 })
 
-// Ajax requests
+app.get('/joinStatus', (req, res) =>{
+    const {roomID, numPlayers} = req.body;
+    setTimeout(()=> {
+        res.send(rooms[roomID].roomSetupComplete);
+    }, 1000);
+});
+
 app.post('/join', (req, res) => {
     // If regarding players joined
     // Add/ remove player from room
@@ -37,8 +43,8 @@ app.post('/join', (req, res) => {
     
 });
 
+// Host begins game
 app.post('/begin', (req, res) => {
-    // If host clicked begin game
     const {roomID, numPlayers} = req.body;
     // Start game
     rooms[roomID].newGame(numPlayers);

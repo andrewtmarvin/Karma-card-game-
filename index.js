@@ -11,11 +11,35 @@ Client side (this file) to do:
 - Update UI (game has begun, whose turn it is, cards displayed)
 
 */
+
+
 // players joined promise
+let joinRoomComplete = false;
+
+const checkJoinedStatus = () => {
+    console.log(userID);
+    axios.get('./joinStatus', {
+        userID,
+        roomIDField : document.querySelector('#roomID-field').value
+    })
+    .then(response =>{
+        console.log(response.data);
+        if (response.data.complete == true) {
+            joinRoomComplete = true;
+        } else {
+            checkJoinedStatus()
+        }
+    })
+    .catch(error => {
+        console.log(error);
+    })
+}
+
 
 
 
 // game status promise
+let gameStatusEnded = false;
 
 
 
@@ -56,6 +80,8 @@ window.addEventListener('load', () => {
     .then(response => {
         document.querySelector('#roomID').innerText = response.data;
         window.userID = response.data;
+
+        checkJoinedStatus();
     })
     .catch(error => {
         console.log("failed to set up room");
