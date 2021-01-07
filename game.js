@@ -1,11 +1,6 @@
 const Player = require('./player.js');
 const Card = require('./card.js');
 
-/*
-To do:
-- 
-*/
-
 // Static variable declaration
 let prevLoser = "";
 
@@ -148,6 +143,11 @@ module.exports = class Game {
 		return this.players[playerStarterStatus.indexOf(true)].name;
 	}
 	getGameStatus() {
-		return 'game status: ';
+		return {
+			numPlayers: this.numPlayers = null,
+			deck: this.deck = [],
+			players: this.players = [],
+			gameOver: this.gameOver = false,
+        };
 	}
 }

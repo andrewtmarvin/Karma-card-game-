@@ -6,7 +6,9 @@ const { connect } = require('tls');
 
 app.use(bodyParser.json()); 
 
+// ID : Room object
 const rooms = {};
+// ID : name
 const users = {};
 
 // Initial page load
@@ -17,8 +19,10 @@ app.get('/', (req, res) => {
 
 app.get('/roomSetUp', (req, res) => {
     const hostRoom = generateRoom();
-    rooms[hostRoom.roomID] = hostRoom;
-    res.send(hostRoom.roomID);
+    const ID = hostRoom.roomID;
+    rooms[ID] = hostRoom;
+    users[ID] = "anon";
+    res.send(ID);
 })
 
 app.post('/join', (req, res) => {
@@ -27,46 +31,37 @@ app.post('/join', (req, res) => {
     // Delete room user is leaving from rooms
     // Return players joined promise
     const {userID, roomIDField} = req.body;
+    let roomJoined = false;
     if (rooms[roomIDField] != null) {
         rooms[roomIDField].userJoin(userID);
-        res.send(roomIDField);
-    } else {
-        res.send("a room is not found");
-    } 
+
+        delete rooms[userID];
+        roomJoined = true;
+    }
+    res.json({roomJoined});
 });
 
 // Host begins game
 app.post('/begin', (req, res) => {
-    const {roomID, numPlayers} = req.body;
-    // Start game
-    rooms[roomID].newGame(numPlayers);
-    // Return players joined promise with end flag
-    res.send('started');
-    // Return game status promise
-    
+    const {roomID, userID} = req.body;
+    const numPlayers = rooms[roomID].curUsers.length;
+    // Game must have 3-5 players. Only host can start the game.
+    if (2 < numPlayers && numPlayers < 6 && roomID == userID) {
+        rooms[roomID].newGame(numPlayers);
+    }
 });
 
 app.post('/gameAction', (req, res) => {
     // Game logic
-    // Return game status promise
+
 });
 
 app.get('/roomStatus', (req, res) =>{
     const {roomID} = req.query;
     if (rooms[roomID]!=null) {
-        try {
-            const room = rooms[roomID];
-            res.json(rooms[roomID].getRoomStatus());
-        }
-        catch (error) {
-            res.send(error);
-        }
+        const room = rooms[roomID];
+        res.json(room.getRoomStatus());
     }
-});
-
-app.post('/gameStatus', (req, res) => {
-    const {roomID} = req.query;
-    return rooms[roomID].getGameStatus();
 });
 
 app.use(express.static(__dirname));

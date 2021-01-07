@@ -3,10 +3,9 @@
 this is where client js is located 
 
 Client side (this file) to do:
-- Loop over promise which asks server how many players have joined room
-- When more than one player in room, join field and button disappear
-- Start button only works if game full and user is host
-- When host clicks start, tell server to begin game
+- State changes:
+    - When more than one player is in room, join field and button disappear
+    - Start button only works if game full and user is host
 - Update UI (game has begun, whose turn it is, cards displayed)
 
 */
@@ -18,8 +17,14 @@ joinBtn.addEventListener('submit', (e) =>{
     const roomIDField = document.querySelector('#roomID-field').value;
     axios.post('/join', {roomIDField, userID})
     .then(response => {
-        document.querySelector('#roomID').innerText = response.data;
-        document.querySelector('#join-room').remove();
+        const {roomJoined} = response.data;
+        if (roomJoined) {
+            roomID = roomIDField;
+            document.querySelector('#roomID').innerText = roomIDField;
+            document.querySelector('#join-room').remove();
+        } else {
+            document.querySelector('#roomID-field').value = "Room not found";
+        }
     })
     .catch(error => {
         console.log(error);
@@ -30,8 +35,8 @@ const beginBtn = document.querySelector("#begin-game");
 beginBtn.addEventListener('click', (e) => {
     e.preventDefault();
     axios.post('/begin', {
-        'roomID': document.querySelector('#roomID').innerText,
-        'numPlayers': 4
+        userID,
+        roomID
     })
     .then(response=> {
         console.log(response.data)
@@ -39,7 +44,6 @@ beginBtn.addEventListener('click', (e) => {
     .catch(error => {
         console.log(error);
     })
-    console.log('a game is begun');
 })
         
 // Set up room, asign client a user ID which is also its starting room ID
@@ -55,28 +59,21 @@ window.addEventListener('load', () => {
     })
 });
 
-let gameBegun = false;
-// Main loop
+// Ping server for status update
 setTimeout(
     setInterval(()=> {
-        if (gameBegun == false) {
-            console.log("getting room status");
-            axios.get('./roomStatus', {
-                params: {
-                    roomID
-                }
-            })
-            .then(res => {
-                if (res.data) {
-                    const responseData = res.data;
-                    console.log(responseData);
-                    gameBegun = true;
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            })
-        } else {
-            console.log("getting game status");
-        }
+        axios.get('./roomStatus', {
+            params: {
+                roomID
+            }
+        })
+        .then(res => {
+            if (res.data) {
+                const responseData = res.data;
+                console.log(responseData);
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        })
     }, 2000), 1000);
