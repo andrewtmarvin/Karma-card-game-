@@ -16,11 +16,11 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-
+// Creates room and returns user/ room ID to client
 app.get('/roomSetUp', (req, res) => {
-    const hostRoom = generateRoom();
-    const ID = hostRoom.roomID;
-    rooms[ID] = hostRoom;
+    const room = generateRoom();
+    const ID = room.roomID;
+    rooms[ID] = room;
     users[ID] = "anon";
     res.send(ID);
 })
@@ -28,13 +28,12 @@ app.get('/roomSetUp', (req, res) => {
 app.post('/join', (req, res) => {
     // If regarding players joined
     // Add/ remove player from room
-    // Delete room user is leaving from rooms
     // Return players joined promise
     const {userID, roomIDField} = req.body;
     let roomJoined = false;
     if (rooms[roomIDField] != null) {
         rooms[roomIDField].userJoin(userID);
-
+        // Delete room user is leaving
         delete rooms[userID];
         roomJoined = true;
     }
@@ -49,11 +48,12 @@ app.post('/begin', (req, res) => {
     if (2 < numPlayers && numPlayers < 6 && roomID == userID) {
         rooms[roomID].newGame(numPlayers);
     }
+    res.end();
 });
 
 app.post('/gameAction', (req, res) => {
     // Game logic
-
+    res.end();
 });
 
 app.get('/roomStatus', (req, res) =>{
@@ -62,6 +62,7 @@ app.get('/roomStatus', (req, res) =>{
         const room = rooms[roomID];
         res.json(room.getRoomStatus());
     }
+    res.end();
 });
 
 app.use(express.static(__dirname));
