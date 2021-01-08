@@ -51,6 +51,8 @@ body {
 }
 
 .main-area {
+	grid-row: main-start / main-end;
+	grid-column: 1 / -1;
 }
 
 .hidden {

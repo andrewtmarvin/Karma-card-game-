@@ -65,6 +65,11 @@ body {
   justify-self: flex-end;
 }
 
+.main-area {
+  grid-row: main-start / main-end;
+  grid-column: 1 / -1;
+}
+
 .hidden {
   visibility: hidden;
   position: absolute;
@@ -74,132 +79,7 @@ body {
 
 .game-area {
   background-color: darkgrey;
-  grid-row: main-start / main-end;
-  grid-column: 1 / -1;
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-rows: 30% 30% 40%;
-      grid-template-rows: 30% 30% 40%;
-  -ms-grid-columns: (1fr)[3];
-      grid-template-columns: repeat(3, 1fr);
-}
-
-.play-area {
-  -ms-grid-row: 2;
-  -ms-grid-row-span: 1;
-  grid-row: 2 / 3;
-  grid-column: 1 / -1;
-  z-index: 100;
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: (1fr)[3];
-      grid-template-columns: repeat(3, 1fr);
-  justify-items: center;
-}
-
-.play-area__deck {
-  height: 100px;
-  width: 100px;
-  background-color: green;
-}
-
-.play-area__pile {
-  height: 100px;
-  width: 100px;
-  background-color: purple;
-}
-
-.play-area__burned {
-  height: 100px;
-  width: 100px;
-  background-color: brown;
-}
-
-.player-1 {
-  background-color: orange;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-  -ms-grid-row: 2;
-  -ms-grid-row-span: 2;
-  grid-row: 2 / 4;
-  grid-column: 1 / -1;
-  padding: 10rem;
-}
-
-.player-2 {
-  background-color: darkkhaki;
-  -ms-grid-row: 1;
-  -ms-grid-row-span: 1;
-  grid-row: 1 / 2;
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 1;
-  grid-column: 1 / 2;
-}
-
-.player-3 {
-  background-color: goldenrod;
-  -ms-grid-row: 1;
-  -ms-grid-row-span: 1;
-  grid-row: 1 / 2;
-  -ms-grid-column: 2;
-  -ms-grid-column-span: 1;
-  grid-column: 2 / 3;
-}
-
-.player-4 {
-  background-color: burlywood;
-  -ms-grid-row: 1;
-  -ms-grid-row-span: 1;
-  grid-row: 1 / 2;
-  -ms-grid-column: 3;
-  -ms-grid-column-span: 1;
-  grid-column: 3 / 4;
-}
-
-.player-5 {
-  -ms-grid-row: 1;
-  -ms-grid-row-span: 1;
-  grid-row: 1 / 2;
-  -ms-grid-column: 5;
-  -ms-grid-column-span: 1;
-  grid-column: 5 / 6;
-}
-
-.player-space {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-flow: wrap column;
-          flex-flow: wrap column;
-  padding: 2rem;
-}
-
-.player-space__hand {
-  justify-self: flex-end;
-}
-
-.opponent {
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-}
-
-.opponent__name {
-  -ms-flex-item-align: start;
-      align-self: flex-start;
-  margin-bottom: auto;
-}
-
-.game-area {
-  background-color: darkgrey;
-  grid-row: main-start / main-end;
-  grid-column: 1 / -1;
+  height: 100%;
   display: -ms-grid;
   display: grid;
   -ms-grid-rows: 30% 30% 40%;
