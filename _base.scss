@@ -49,3 +49,13 @@ body {
 		justify-self: flex-end;
 	}
 }
+
+.main-area {
+}
+
+.hidden {
+	visibility: hidden;
+	position: absolute;
+	z-index: -1;
+	right: 5000px;
+}

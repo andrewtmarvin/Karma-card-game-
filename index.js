@@ -64,16 +64,42 @@ setTimeout(
     setInterval(()=> {
         axios.get('./roomStatus', {
             params: {
-                roomID
+                roomID,
+                userID
             }
         })
         .then(res => {
             if (res.data) {
                 const responseData = res.data;
+                const {curUsers, gameEnded} = responseData;
                 console.log(responseData);
+                // When multiple users in room, show game board
+                if (curUsers.length > 1) {
+                    showGameBoard();
+                } else {
+                    showLobby();
+                }
+                // When game has ended, show lobby
+                if (gameEnded == true) {
+                    showLobby();
+                }
             }
         })
         .catch(error => {
             console.log(error);
         })
     }, 2000), 1000);
+
+    const showGameBoard = () => {
+        const gameLobby = document.querySelector('.game-lobby');
+        gameLobby.classList.add('hidden');
+        const gameBoard = document.querySelector('.game-area');
+        gameBoard.classList.remove('hidden');
+    }
+
+    const showLobby = () => {
+        const gameLobby = document.querySelector('.game-lobby');
+        gameLobby.classList.remove('hidden');
+        const gameBoard = document.querySelector('.game-area');
+        gameBoard.classList.add('hidden');
+    }

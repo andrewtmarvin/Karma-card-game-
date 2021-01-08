@@ -5,6 +5,7 @@ module.exports = class Room {
         this.roomID = ID;
         this.curUsers = [ID, ];
         this.curGame = null;
+        this.gameEnded = false;
         this.prevLoser = null;
         this.roomSetupComplete = false;
     }

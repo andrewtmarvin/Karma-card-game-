@@ -2,13 +2,12 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
-const { connect } = require('tls');
 
 app.use(bodyParser.json()); 
 
-// ID : Room object
+// {ID : Room object}
 const rooms = {};
-// ID : name
+// {ID : {name, lastConnectedTimestamp}}
 const users = {};
 
 // Initial page load
@@ -21,7 +20,11 @@ app.get('/roomSetUp', (req, res) => {
     const room = generateRoom();
     const ID = room.roomID;
     rooms[ID] = room;
-    users[ID] = "anon";
+    users[ID] = {
+        'name' : "anon",
+        'curRoom' : ID,
+        'lastConnected' : Date.now()
+    };
     res.send(ID);
 })
 
@@ -31,11 +34,19 @@ app.post('/join', (req, res) => {
     // Return players joined promise
     const {userID, roomIDField} = req.body;
     let roomJoined = false;
+    // If room exists, proceed
     if (rooms[roomIDField] != null) {
-        rooms[roomIDField].userJoin(userID);
-        // Delete room user is leaving
-        delete rooms[userID];
-        roomJoined = true;
+        const roomToJoin = rooms[roomIDField];
+        // If room still has space for new player
+        if (roomToJoin.curUsers.length < 5) {
+            // Update user's room ID
+            users[userID]['curRoom'] = roomIDField;
+            // Add user to room they're joining
+            roomToJoin.userJoin(userID);
+            // Delete room that user is leaving
+            delete rooms[userID];
+            roomJoined = true;
+        }
     }
     res.json({roomJoined});
 });
@@ -57,10 +68,14 @@ app.post('/gameAction', (req, res) => {
 });
 
 app.get('/roomStatus', (req, res) =>{
-    const {roomID} = req.query;
-    if (rooms[roomID]!=null) {
+    const {roomID, userID} = req.query;
+    if (rooms[roomID] != null && users[userID] != null) {
         const room = rooms[roomID];
         res.json(room.getRoomStatus());
+        
+        // Update lastConnected timestamp
+        users[userID]['lastConnected'] = Date.now();
+
     }
     res.end();
 });
@@ -93,3 +108,22 @@ function generateRoom() {
         return Math.random().toString(36).substr(2, 5).toUpperCase();
     }    
 }
+
+// Every 10 seconds, check if all users still connected. Remove users who haven't connected in over 10 seconds
+setInterval(()=> {
+    // Find users who have closed browser or lost connection, delete them and reset page for any users from their room
+    console.log(users);
+    for (const userID in users) {
+        if (Date.now() - users[userID]['lastConnected'] > 10000) {
+            const currentRoom = rooms[users[userID]['curRoom']];
+            // End any game user was playing
+            currentRoom['gameEnded'] = true;
+            // Remove user from room
+            currentRoom['curUsers'] = currentRoom['curUsers'].filter(user => user !== userID);
+            // Remove user from user liset
+            delete users[userID];
+            
+        }
+    }
+
+}, 5000)
