@@ -7,8 +7,11 @@ const nameForm = document.querySelector(".player-name-form");
 nameForm.addEventListener('submit', (e) => {
     e.preventDefault();
     // Update UI and server with new player name
-    const playerName = document.querySelector("#player-name").value;
-    document.querySelector(".player-name").innerText = playerName;
+    let playerName = document.querySelector("#player-name").value;
+    if (playerName == '') {
+        playerName = "anon";
+    }
+    document.querySelector(".player-name-display").innerText += playerName;
     axios.get('/roomSetUp', {
         params: {
             playerName
@@ -41,29 +44,6 @@ hostBtn.addEventListener('click', (e)=> {
     })
 });
 
-// JOIN OTHER ROOM BUTTON
-const joinBtn = document.querySelector("#join-room");
-joinBtn.addEventListener('submit', (e) =>{
-    e.preventDefault();
-    const userID = document.querySelector('#roomID').innerText;
-    const roomIDField = document.querySelector('#roomID-field').value;
-    axios.post('/join', {roomIDField, userID})
-    .then(response => {
-        const {roomJoined} = response.data;
-        if (roomJoined) {
-            roomID = roomIDField;
-            document.querySelector('#roomID').innerText = roomIDField;
-            document.querySelector('#join-room').remove();
-            exitLobby();
-        } else {
-            document.querySelector('#roomID-field').value = "Room not found";
-        }
-    })
-    .catch(error => {
-        console.log(error);
-    })
-})
-
 // BEGIN GAME BUTTON
 const beginBtn = document.querySelector("#begin-game");
 beginBtn.addEventListener('click', (e) => {
@@ -90,25 +70,48 @@ const startLobbyStatusPing = () => {
             }
         })
         .then(res => {
-            const openGames = document.querySelector(".open-games");
+            const openGames = document.querySelector(".game-lobby__open-games");
             openGames.innerHTML = '';
             
             const responseData = res.data;
-            if (Object.keys(responseData).length > 0) {
+            
+            // If response is JSON and object has rooms
+            if (res.headers['content-type'].substring(0,4) != 'text' && Object.keys(responseData).length > 0) {
+                const joinGame = document.createElement('p');
+                joinGame.innerText = "Join a game:";
+                openGames.appendChild(joinGame);
+
                 for (const game in responseData) {
                     // Put links into page
                     const link = document.createElement('a');
                     link.setAttribute('href', "#");
                     link.setAttribute('class', "join-link");
+                    console.dir(responseData);
                     const p = document.createElement('p');
-                    p.innerText = responseData[game][0][1];
+                    p.innerText = responseData[game][0][1] +  "'s game";
+                    p.setAttribute('data-roomID', responseData[game][0][0]);
                     link.appendChild(p);
                     openGames.appendChild(link);
                 }
                 const allJoinLinks = document.getElementsByClassName('join-link')
                 for (const link of allJoinLinks) {
-                    link.addEventListener('click', ()=>{
-                        console.log('you clicked me');
+                    link.addEventListener('click', (e)=>{
+                        const targetRoomID = e.target.dataset.roomid;
+                        axios.post('/join', {targetRoomID, userID})
+                        .then(response => {
+                            const {roomJoined} = response.data;
+                            if (roomJoined) {
+                                roomID = targetRoomID;
+                                document.querySelector('#roomID').innerText = targetRoomID;
+                                exitLobby();
+                                startRoomStatusPing();
+                            } else {
+                                console.log("room doesn't exist");
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
                     })
                 };
             } else {

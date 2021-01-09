@@ -1,13 +1,13 @@
 const Game = require('./game.js');
 
 module.exports = class Room {
-    constructor(ID) {
+    constructor(ID, playerName) {
         this.roomID = ID;
-        this.curUsers = [ID, ];
+        this.curUsers = [[ID, playerName], ];
         this.curGame = null;
         this.gameEnded = false;
         this.prevLoser = null;
-        this.roomSetupComplete = false;
+        this.gameStarted = false;
     }
 
     joinOtherRoom(otherRoomID) {
@@ -17,13 +17,13 @@ module.exports = class Room {
         
     }
 
-    userJoin(newUser) {
+    userJoin(newUser, userName) {
         // Add user to this room
-        this.curUsers.push(newUser);
+        this.curUsers.push([newUser, userName]);
     }
 
     newGame(numPlayers) {
-        this.roomSetupComplete = true;
+        this.gameStarted = true;
 
         // Game setup
         this.curGame = new Game();
@@ -44,7 +44,7 @@ module.exports = class Room {
             curUsers: this.curUsers,
             curGame: this.curGame,
             prevLoser: this.prevLoser,
-            roomSetupComplete: this.roomSetupComplete
+            gameStarted: this.gameStarted
         };
     }
 }

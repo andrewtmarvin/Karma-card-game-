@@ -23,40 +23,42 @@ app.get('/', (req, res) => {
 
 // Creates room and returns user/ room ID to client
 app.get('/roomSetUp', (req, res) => {
-    let { playerName } = req.query;
-    if (playerName == '') {
-        playerName = "anon";
+    try {
+        let { playerName } = req.query;
+        const room = generateRoom(playerName);
+        const ID = room.roomID;
+        rooms[ID] = room;
+        users[ID] = {
+            'name' : playerName,
+            'curRoom' : ID,
+            'lastConnected' : Date.now()
+        };
+        res.send(ID);
+
+    } catch(e) {
+        console.log(e);
     }
-    const room = generateRoom();
-    const ID = room.roomID;
-    rooms[ID] = room;
-    users[ID] = {
-        'name' : playerName,
-        'curRoom' : ID,
-        'lastConnected' : Date.now()
-    };
-    res.send(ID);
 })
 
 app.post('/join', (req, res) => {
     // If regarding players joined
     // Add/ remove player from room
     // Return players joined promise
-    const {userID, roomIDField} = req.body;
+    const {userID, targetRoomID} = req.body;
     let roomJoined = false;
     // If room exists, proceed
-    if (rooms[roomIDField] != null) {
-        const roomToJoin = rooms[roomIDField];
+    if (rooms[targetRoomID] != null) {
+        const roomToJoin = rooms[targetRoomID];
         // If room still has space for new player
         if (roomToJoin.curUsers.length < 5) {
             // Update user's room ID
-            users[userID]['curRoom'] = roomIDField;
+            users[userID]['curRoom'] = targetRoomID;
             // Add user to room they're joining
-            roomToJoin.userJoin(userID);
+            roomToJoin.userJoin(userID, users[userID]['name']);
             // Delete room that user is leaving
             delete rooms[userID];
             // Add user to game in lobby
-            lobby[userID].push([userID, users[userID]['name']]);
+            lobby[targetRoomID].push([userID, users[userID]['name']]);
             roomJoined = true;
         }
     }
@@ -86,11 +88,16 @@ app.post('/gameAction', (req, res) => {
 
 // Send back username and roomID of users who have clicked to host a game
 app.get('/lobbyStatus', (req, res) =>{
-    const {userID} = req.query;
-    res.json(lobby);
-
+    
     // Update lastConnected timestamp
-    users[userID]['lastConnected'] = Date.now();
+    try{
+        const {userID} = req.query;
+        users[userID]['lastConnected'] = Date.now();
+        res.json(lobby);
+    } catch (err) {
+        console.log('server was restarted. client using stale data. refresh browser');
+        res.send('refresh browser');
+    }
 });
 
 app.get('/roomStatus', (req, res) =>{
@@ -125,9 +132,9 @@ app.listen(3004, ()=>{
     console.log('listening for user 4');
 });
 
-function generateRoom() {
+function generateRoom(playerName) {
     const Room = require('./room.js');
-    const userRoom = new Room(generateID());
+    const userRoom = new Room(generateID(), playerName);
     return userRoom;
     // Function generates unique room ID
     function generateID() {
@@ -135,39 +142,39 @@ function generateRoom() {
     }    
 }
 
-setInterval(()=> {
-    // Find users who have closed browser or lost connection, delete them and reset page for any users from their room
-    for (const userID in users) {
-        if (Date.now() - users[userID]['lastConnected'] > 4001) {
-            const currentRoom = rooms[users[userID]['curRoom']];
-            // End any game user was playing
-            currentRoom['gameEnded'] = true;
-            // Remove user from room
-            currentRoom['curUsers'] = currentRoom['curUsers'].filter(user => user !== userID);
-            // Delete room if empty
-            console.log(currentRoom['curUsers'].length);
-            if (currentRoom['curUsers'].length == 0) {
-                delete currentRoom;
-            }
-            // Remove user from user list
-            delete users[userID];
-            // Remove user from lobby games
-            for (const game in lobby) {
-                for (const player of lobby[game]) {
-                    player.forEach((user, i)=> {
-                        console.log(user);
-                        if (user[0] == userID ) {
-                            game.pop(i);
-                        }
-                    }) 
+// Find users who have closed browser or lost connection, delete them and reset page for any users from their room
+// setInterval(()=> {
+//     for (const userID in users) {
+//         if (Date.now() - users[userID]['lastConnected'] > 4001) {
+//             const currentRoom = rooms[users[userID]['curRoom']];
+//             // End any game user was playing
+//             currentRoom['gameEnded'] = true;
+//             // Remove user from room
+//             currentRoom['curUsers'] = currentRoom['curUsers'].filter(user => user !== userID);
+//             // Delete room if empty
+//             console.log(currentRoom['curUsers'].length);
+//             if (currentRoom['curUsers'].length == 0) {
+//                 delete currentRoom;
+//             }
+//             // Remove user from user list
+//             delete users[userID];
+//             // Remove user from lobby games
+//             for (const game in lobby) {
+//                 for (const player of lobby[game]) {
+//                     player.forEach((user, i)=> {
+//                         console.log(user);
+//                         if (user[0] == userID ) {
+//                             game.pop(i);
+//                         }
+//                     }) 
 
-                }
+//                 }
 
-            }
-        }
-    }
-    // console.log(users);
-    console.log("rooms:");
-    console.log(rooms);
-    // console.log(lobby);
-}, 2000);
+//             }
+//         }
+//     }
+//     // console.log(users);
+//     console.log("rooms:");
+//     console.log(rooms);
+//     // console.log(lobby);
+// }, 2000);

@@ -11,14 +11,13 @@
             <h1 class="header__title-main">Let's play Karma Palace</h1>
             <p class="header__title-sub">Legendary Backpacker Card Game</p>
         </div>
-        <div class="header__connect">
-            <p class="room-ID">This room's ID: <span id="roomID"></span></p>
+        <!-- <div class="header__connect">
             <form action="submit" method="post" id="join-room">
                 <label for="roomID-field"></label>
                 <input name="roomID-field" id="roomID-field" type="text" class="text">
                 <button type="submit" class="btn">Connect</button>
             </form>
-        </div>
+        </div> -->
     </header>
     <main class='main-area'>
         <div class="game-lobby">
@@ -27,9 +26,12 @@
                 <input type="text" name="name" id="player-name">
                 <button type="submit" class="btn">Submit</button>
             </form>
-            <p class="player-name">NAME GOES HERE</p>
-            <button class="host-game btn">Host Game</button>
-            <div class="open-games"></div>
+            <div class="game-lobby__lobby-top">
+                <p class="player-name-display">Your display name:&nbsp;</p>
+                <p class="room-ID">This room's ID:&nbsp;<span id="roomID"></span></p>
+                <button class="host-game btn">Host Game</button>
+            </div>
+            <div class="game-lobby__open-games"></div>
         </div>
         <div class="game-area hidden">
             <div class='player-space player-2 opponent' id='player2'>
