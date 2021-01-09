@@ -77,6 +77,13 @@ body {
   right: 5000px;
 }
 
+.btn {
+  border: none;
+  padding: 2rem 5rem;
+  -webkit-box-shadow: 0.3rem 0.3rem 1rem rgba(0, 0, 0, 0.5);
+          box-shadow: 0.3rem 0.3rem 1rem rgba(0, 0, 0, 0.5);
+}
+
 .game-area {
   background-color: darkgrey;
   height: 100%;
@@ -117,6 +124,17 @@ body {
   height: 100px;
   width: 100px;
   background-color: brown;
+}
+
+.play-area__btn {
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 1;
+  grid-column: 2 / 3;
+  -ms-grid-column-align: center;
+      justify-self: center;
+  -ms-flex-item-align: end;
+      -ms-grid-row-align: end;
+      align-self: end;
 }
 
 .player-1 {
@@ -197,6 +215,31 @@ body {
 .opponent__name {
   -ms-flex-item-align: start;
       align-self: flex-start;
+  margin-bottom: auto;
+}
+
+.game-lobby {
+  background: snow;
+  height: 100%;
+}
+
+.player-name-form {
+  width: 100%;
+  height: 100%;
+  background-color: gray;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column wrap;
+          flex-flow: column wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.player-name-form > *:last-child {
   margin-bottom: auto;
 }
 /*# sourceMappingURL=main.css.map */

@@ -28,6 +28,11 @@
 		width: 100px;
 		background-color: brown;
 	}
+	&__btn {
+		grid-column: 2 / 3;
+		justify-self: center;
+		align-self: end;
+	}
 }
 
 .player-1 {

@@ -1,0 +1,17 @@
+.game-lobby {
+	background: snow;
+	height: 100%;
+}
+
+.player-name-form {
+	width: 100%;
+	height: 100%;
+	background-color: gray;
+	display: flex;
+	flex-flow: column wrap;
+	align-items: center;
+
+	& > *:last-child {
+		margin-bottom: auto;
+	}
+}

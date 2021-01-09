@@ -8,7 +8,7 @@
 <body class="page-layout">
     <header class="header">
         <div class="header__title">
-            <h1 class="header__title-main">Let's play Karma Palace<button class="btn" id="begin-game">Begin!</button></h1>
+            <h1 class="header__title-main">Let's play Karma Palace</h1>
             <p class="header__title-sub">Legendary Backpacker Card Game</p>
         </div>
         <div class="header__connect">
@@ -16,13 +16,20 @@
             <form action="submit" method="post" id="join-room">
                 <label for="roomID-field"></label>
                 <input name="roomID-field" id="roomID-field" type="text" class="text">
-                <button type="submit" class="">Connect</button>
+                <button type="submit" class="btn">Connect</button>
             </form>
         </div>
     </header>
     <main class='main-area'>
         <div class="game-lobby">
-            lobby
+            <form action="submit" class="player-name-form">
+                <label for="name">Enter name: </label>
+                <input type="text" name="name" id="player-name">
+                <button type="submit" class="btn">Submit</button>
+            </form>
+            <p class="player-name">NAME GOES HERE</p>
+            <button class="host-game btn">Host Game</button>
+            <div class="open-games"></div>
         </div>
         <div class="game-area hidden">
             <div class='player-space player-2 opponent' id='player2'>
@@ -74,6 +81,7 @@
                     <h1>burned</h1>
                     cards burned: 15
                 </div>
+                <button class="btn play-area__btn" id="begin-game">Begin!</button>
             </div>
             <div class='player-space player-1' id='player1'>
                 <div class="player-space__cards">
