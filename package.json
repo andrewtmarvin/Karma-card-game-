@@ -1,5 +1,5 @@
 {
-  "name": "Karma-Palace-card-game-",
+  "name": "Karma-card-game-",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andrewtmarvin/Karma-Palace-card-game-.git"
+    "url": "git+https://github.com/andrewtmarvin/Karma-card-game-.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/andrewtmarvin/Karma-Palace-card-game-/issues"
+    "url": "https://github.com/andrewtmarvin/Karma-card-game-/issues"
   },
-  "homepage": "https://github.com/andrewtmarvin/Karma-Palace-card-game-#readme",
+  "homepage": "https://github.com/andrewtmarvin/Karma-card-game-#readme",
   "dependencies": {
     "axios": "^0.21.1",
     "express": "^4.17.1",
