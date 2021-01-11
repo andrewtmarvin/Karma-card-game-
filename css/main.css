@@ -87,21 +87,48 @@ body {
   display: grid;
   -ms-grid-rows: 30% 30% 40%;
       grid-template-rows: 30% 30% 40%;
-  -ms-grid-columns: (1fr)[3];
-      grid-template-columns: repeat(3, 1fr);
+}
+
+.opponent-area {
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1 / 2;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1 / 2;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.player-area {
+  -ms-grid-row: 2;
+  -ms-grid-row-span: 2;
+  grid-row: 2 / 4;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1 / 2;
+  background-color: orange;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  padding: 10rem;
 }
 
 .play-area {
   -ms-grid-row: 2;
   -ms-grid-row-span: 1;
   grid-row: 2 / 3;
-  grid-column: 1 / -1;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1 / 2;
   z-index: 100;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (1fr)[3];
       grid-template-columns: repeat(3, 1fr);
   justify-items: center;
+  padding: 1rem;
 }
 
 .play-area__deck {
@@ -131,18 +158,6 @@ body {
   -ms-flex-item-align: end;
       -ms-grid-row-align: end;
       align-self: end;
-}
-
-.player-1 {
-  background-color: orange;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-  -ms-grid-row: 2;
-  -ms-grid-row-span: 2;
-  grid-row: 2 / 4;
-  grid-column: 1 / -1;
-  padding: 10rem;
 }
 
 .player-2 {
@@ -179,12 +194,12 @@ body {
   -ms-grid-row: 1;
   -ms-grid-row-span: 1;
   grid-row: 1 / 2;
-  -ms-grid-column: 5;
+  -ms-grid-column: 4;
   -ms-grid-column-span: 1;
-  grid-column: 5 / 6;
+  grid-column: 4 / 5;
 }
 
-.player-space {
+.user-space {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -198,11 +213,13 @@ body {
   padding: 2rem;
 }
 
-.player-space__hand {
+.user-space__hand {
   justify-self: flex-end;
 }
 
 .opponent {
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;

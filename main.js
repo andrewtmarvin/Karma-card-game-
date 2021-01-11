@@ -116,21 +116,8 @@ app.get('/roomStatus', (req, res) =>{
 
 app.use(express.static(__dirname));
 
-// Simulating 4 concurrent users
 app.listen(3001, ()=>{
-    console.log('listening for user 1');
-});
-
-app.listen(3002, ()=>{
-    console.log('listening for user 2');
-});
-
-app.listen(3003, ()=>{
-    console.log('listening for user 3');
-});
-
-app.listen(3004, ()=>{
-    console.log('listening for user 4');
+    console.log('listening for users');
 });
 
 // For react proxy 

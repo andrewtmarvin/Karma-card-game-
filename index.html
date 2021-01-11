@@ -16,7 +16,7 @@
         <div class="game-lobby">
             <form action="submit" class="player-name-form">
                 <label for="name">Enter name: </label>
-                <input type="text" name="name" id="player-name">
+                <input type="text" name="name" id="player-name" autofocus>
                 <button type="submit" class="btn">Submit</button>
             </form>
             <div class="game-lobby__lobby-top">
@@ -27,40 +27,54 @@
             <div class="game-lobby__open-games"></div>
         </div>
         <div class="game-area hidden">
-            <div class='player-space player-2 opponent' id='player2'>
-                <div class="opponent__name">
-                    Waiting for player 2 to join...
+            <div class="opponent-area">
+                <div class='user-space player-2 opponent' id='player2'>
+                    <div class="opponent__name">
+                        Waiting for player 2 to join...
+                    </div>
+                    <div class="opponent__hand">
+                        HAND: ? ? ? 
+                    </div>
+                    <div class="opponent__cards">
+                        <p>FACE DOWN: ? ? ? </p>
+                        <p>FACE UP: ace 7 king</p>
+                    </div>
                 </div>
-                <div class="opponent__hand">
-                    HAND: ? ? ? 
+                <div class='user-space player-3 opponent hidden' id='player3'>
+                    <div class="opponent__name">
+                        Waiting for player 3 to join...
+                    </div>
+                    <div class="opponent__hand">
+                        HAND: ? ? ? 
+                    </div>
+                    <div class="opponent__cards">
+                        <p>FACE UP: 7 3 jack</p>
+                        <p>FACE DOWN: ? ? ? </p>
+                    </div>
                 </div>
-                <div class="opponent__cards">
-                    <p>FACE DOWN: ? ? ? </p>
-                    <p>FACE UP: ace 7 king</p>
+                <div class='user-space player-4 opponent hidden' id='player4'>
+                    <div class="opponent__name">
+                        Waiting for player 4 to join...
+                    </div>
+                    <div class="opponent__hand">
+                        HAND: ? ? ? 
+                    </div>
+                    <div class="opponent__cards">
+                        <p>FACE UP: ace 7 king</p>
+                        <p>FACE DOWN: ? ? ? </p>
+                    </div>
                 </div>
-            </div>
-            <div class='player-space player-3 opponent' id='player3'>
-                <div class="opponent__name">
-                    Waiting for player 3 to join...
-                </div>
-                <div class="opponent__hand">
-                    HAND: ? ? ? 
-                </div>
-                <div class="opponent__cards">
-                    <p>FACE UP: 7 3 jack</p>
-                    <p>FACE DOWN: ? ? ? </p>
-                </div>
-            </div>
-            <div class='player-space player-4 opponent' id='player4'>
-                <div class="opponent__name">
-                    Waiting for player 4 to join...
-                </div>
-                <div class="opponent__hand">
-                    HAND: ? ? ? 
-                </div>
-                <div class="opponent__cards">
-                    <p>FACE UP: ace 7 king</p>
-                    <p>FACE DOWN: ? ? ? </p>
+                <div class='user-space player-5 opponent hidden' id='player5'>
+                    <div class="opponent__name">
+                        Waiting for player 5 to join...
+                    </div>
+                    <div class="opponent__hand">
+                        HAND: ? ? ? 
+                    </div>
+                    <div class="opponent__cards">
+                        <p>FACE UP: ace 7 king</p>
+                        <p>FACE DOWN: ? ? ? </p>
+                    </div>
                 </div>
             </div>
             <div class="play-area">
@@ -76,15 +90,15 @@
                     <h1>burned</h1>
                     cards burned: 15
                 </div>
-                <button class="btn play-area__btn" id="begin-game">Begin!</button>
+                <button class="btn play-area__btn hidden" id="begin-game">Begin!</button>
             </div>
-            <div class='player-space player-1' id='player1'>
+            <div class='player-area user-space player-1' id='player1'>
                 <div class="player-1__name"></div>
-                <div class="player-space__cards">
+                <div class="user-space__cards">
                     <p>FACE UP: ace 7 king</p>
                     <p>FACE DOWN: ? ? ? </p>
                 </div>
-                <div class="player-space__hand">
+                <div class="user-space__hand">
                     HAND: 5 10 8
                 </div>
             </div>

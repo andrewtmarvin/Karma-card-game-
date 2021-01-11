@@ -5,9 +5,9 @@ this is where client js is located
 // Local data 
 window.players = [];
 window.game = null;
-window.gameStarted = false;
-window.gameEnded = false;
-window.prevLoser = null;
+window.started = false;
+window.ended = false;
+window.loser = null;
 
 // ROOM SETUP
 const nameForm = document.querySelector(".player-name-form");
@@ -110,7 +110,7 @@ const startLobbyStatusPing = () => {
                                 exitLobby();
                                 startRoomStatusPing();
                             } else {
-                                console.log("room doesn't exist");
+                                console.log("room is full");
                             }
                         })
                         .catch(error => {
@@ -174,14 +174,18 @@ const exitGame = () => {
 const handleGameData = (data) => {
     const {roomID, curUsers, curGame, gameStarted, gameEnded, prevLoser} = data;
     
-    // Update local data
-    if (window.players.length != curUsers.length) {
-        window.players = curUsers;
+    // Each if statement compares local data to incoming data. Updates and takes action if different.
+
+    
+    // PLAYER JOINS
+    if (players.length != curUsers.length) {
+        players = curUsers;
         // Update names in UI
         const playerNames = [document.querySelector(".player-1__name"), 
-                            document.querySelector("#player2 > .opponent__name"),
-                            document.querySelector("#player3 > .opponent__name"), 
-                            document.querySelector("#player4 > .opponent__name"),];
+        document.querySelector("#player2 > .opponent__name"),
+        document.querySelector("#player3 > .opponent__name"), 
+        document.querySelector("#player4 > .opponent__name"),
+        document.querySelector("#player5 > .opponent__name"),];
         // Each player plays from the large bottom player-1 area
         for (let i = 0, j = 0; i < players.length; i++, j++) {
             if (players[i][0] == userID) {
@@ -189,29 +193,49 @@ const handleGameData = (data) => {
                 j--;
             } else {
                 playerNames[j+1].innerText = players[i][1];
+                // Reveal next open player slot
+                if (j < 3) {
+                    playerNames[j+2].parentElement.classList.remove('hidden');
+                }
             }
         }
+        // Display game begin game button for host when at least 3 players
+        if (curUsers.length >= 3 && userID == roomID) {
+            document.querySelector("#begin-game").classList.remove("hidden");
+        }
     }
-    if (window.game != curGame) {
+    
+    // GAME BEGINS
+    if (started != gameStarted) {
+        started = gameStarted;
+        // Hide game begin button
+        document.querySelector("#begin-game").classList.add("hidden");
+        
+        // Hide extra opponent slot
+        if (curUsers.length < 5) {
+            const opponents = document.querySelectorAll('.opponent');
+            opponents[curUsers.length-1].classList.add('hidden');
+        }
+    }
+    
+    // GAME STATE CHANGES
+    if (game != curGame) {
         console.log("updated game");
-        window.game = curGame;
+        game = curGame;
     }
-    if (window.gameStarted != gameStarted) {
-        console.log("updated gameStarted");
-        window.gameStarted = gameStarted;
-    }
-    if (window.gameEnded != gameEnded) {
+
+    // GAME ENDS
+    if (ended != gameEnded) {
         console.log("updated gameEnded");
-        window.gameEnded = gameEnded;
-    }
-    if (window.prevLoser != prevLoser) {
-        console.log("updated prevLoser");
-        window.prevLoser = prevLoser;
-    }
-
-
-
-    if (gameEnded == true) {
+        ended = gameEnded;
+        // Need to give option to play again. Would be nice if players from lobby could join in between games
         showLobby();
     }
+
+    // NEW LOSER
+    if (loser != prevLoser) {
+        console.log("updated prevLoser");
+        loser = prevLoser;
+    }
+    
 };
