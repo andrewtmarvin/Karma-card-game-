@@ -64,6 +64,7 @@ app.post('/join', (req, res) => {
     }
     res.json({roomJoined});
 });
+
 app.post('/host', (req, res) => {
     const {userID} = req.body;
     lobby[userID] = [[userID, users[userID]['name']], ];
@@ -130,6 +131,11 @@ app.listen(3003, ()=>{
 
 app.listen(3004, ()=>{
     console.log('listening for user 4');
+});
+
+// For react proxy 
+app.listen(8080, () => {
+  console.log('listening for react pings');
 });
 
 function generateRoom(playerName) {

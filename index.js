@@ -18,13 +18,14 @@ nameForm.addEventListener('submit', (e) => {
     if (playerName == '') {
         playerName = "anon";
     }
+
     document.querySelector(".player-name-display").innerText += playerName;
     axios.get('/roomSetUp', {
         params: {
             playerName
         }
     })
-    // Asign client a user ID which is also its starting room ID
+    // Assign client a user ID which is also its starting room ID
     .then(response => {
         document.querySelector('#roomID').innerText = response.data;
         window.userID = response.data;
@@ -67,10 +68,10 @@ beginBtn.addEventListener('click', (e) => {
 // LOBBY STATUS PING
 let lobbyIntervalKey = 0;
 const startLobbyStatusPing = () => {
-    lobbyIntervalKey = setInterval(()=> {
+    lobbyIntervalKey = setInterval(() => {
         axios.get('./lobbyStatus', {
             params: {
-                userID
+              userID
             }
         })
         .then(res => {
