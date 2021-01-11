@@ -5,9 +5,9 @@ module.exports = class Room {
         this.roomID = ID;
         this.curUsers = [[ID, playerName], ];
         this.curGame = null;
+        this.gameStarted = false;
         this.gameEnded = false;
         this.prevLoser = null;
-        this.gameStarted = false;
     }
 
     joinOtherRoom(otherRoomID) {
@@ -44,7 +44,8 @@ module.exports = class Room {
             curUsers: this.curUsers,
             curGame: this.curGame,
             prevLoser: this.prevLoser,
-            gameStarted: this.gameStarted
+            gameStarted: this.gameStarted,
+            gameEnded: this.gameEnded
         };
     }
 }

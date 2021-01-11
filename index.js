@@ -2,6 +2,13 @@
 this is where client js is located 
 */
 
+// Local data 
+window.players = [];
+window.game = null;
+window.gameStarted = false;
+window.gameEnded = false;
+window.prevLoser = null;
+
 // ROOM SETUP
 const nameForm = document.querySelector(".player-name-form");
 nameForm.addEventListener('submit', (e) => {
@@ -39,9 +46,8 @@ hostBtn.addEventListener('click', (e)=> {
         userID
     })
     .then(res => {
-        console.log(res);
-
     })
+    .catch(error => console.log(error));
 });
 
 // BEGIN GAME BUTTON
@@ -55,9 +61,7 @@ beginBtn.addEventListener('click', (e) => {
     .then(response=> {
         console.log(response.data)
     })
-    .catch(error => {
-        console.log(error);
-    })
+    .catch(error => console.log(error))
 })
         
 // LOBBY STATUS PING
@@ -86,7 +90,6 @@ const startLobbyStatusPing = () => {
                     const link = document.createElement('a');
                     link.setAttribute('href', "#");
                     link.setAttribute('class', "join-link");
-                    console.dir(responseData);
                     const p = document.createElement('p');
                     p.innerText = responseData[game][0][1] +  "'s game";
                     p.setAttribute('data-roomID', responseData[game][0][0]);
@@ -148,13 +151,7 @@ const startRoomStatusPing = () => {
         })
         .then(res => {
             if (res.data) {
-                const responseData = res.data;
-                const {curUsers, gameEnded} = responseData;
-                console.log(responseData);
-                // When game has ended, show lobby
-                if (gameEnded == true) {
-                    showLobby();
-                }
+                handleGameData(res.data);
             }
         })
         .catch(error => {
@@ -172,3 +169,48 @@ const exitGame = () => {
     const gameBoard = document.querySelector('.game-area');
     gameBoard.classList.add('hidden');
 }
+
+const handleGameData = (data) => {
+    const {roomID, curUsers, curGame, gameStarted, gameEnded, prevLoser} = data;
+    
+    // Update local data
+    if (window.players.length != curUsers.length) {
+        window.players = curUsers;
+        // Update names in UI
+        const playerNames = [document.querySelector(".player-1__name"), 
+                            document.querySelector("#player2 > .opponent__name"),
+                            document.querySelector("#player3 > .opponent__name"), 
+                            document.querySelector("#player4 > .opponent__name"),];
+        // Each player plays from the large bottom player-1 area
+        for (let i = 0, j = 0; i < players.length; i++, j++) {
+            if (players[i][0] == userID) {
+                playerNames[0].innerText = players[i][1];
+                j--;
+            } else {
+                playerNames[j+1].innerText = players[i][1];
+            }
+        }
+    }
+    if (window.game != curGame) {
+        console.log("updated game");
+        window.game = curGame;
+    }
+    if (window.gameStarted != gameStarted) {
+        console.log("updated gameStarted");
+        window.gameStarted = gameStarted;
+    }
+    if (window.gameEnded != gameEnded) {
+        console.log("updated gameEnded");
+        window.gameEnded = gameEnded;
+    }
+    if (window.prevLoser != prevLoser) {
+        console.log("updated prevLoser");
+        window.prevLoser = prevLoser;
+    }
+
+
+
+    if (gameEnded == true) {
+        showLobby();
+    }
+};

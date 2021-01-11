@@ -89,3 +89,15 @@
 	&__hands {
 	}
 }
+
+.opponent,
+.player-1 {
+	&__name {
+		font-family: 'Righteous', cursive;
+		font-size: 2rem;
+		margin-bottom: auto;
+		align-self: flex-start;
+		text-transform: uppercase;
+		color: black;
+	}
+}

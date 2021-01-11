@@ -54,7 +54,7 @@ body {
 
 .header__title-main {
   font-family: 'Righteous', cursive;
-  font-size: 2.5rem;
+  font-size: 3rem;
 }
 
 .header__title-sub {
@@ -212,6 +212,17 @@ body {
   -ms-flex-item-align: start;
       align-self: flex-start;
   margin-bottom: auto;
+}
+
+.opponent__name,
+.player-1__name {
+  font-family: 'Righteous', cursive;
+  font-size: 2rem;
+  margin-bottom: auto;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+  text-transform: uppercase;
+  color: black;
 }
 
 .game-lobby {
