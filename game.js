@@ -154,15 +154,27 @@ module.exports = class Game {
 	getGameStatus(userID) {
 		// Return what cards the user needs (user's hand + all face up cards)
 
-		// ping 5 turns for testing
-		if (this.turn < 2) {
+		// ping 3 turns for testing
+		if (this.turn < 3) {
 			this.turn++;
 		} else {
 			this.gameOver = true;
 		}
 		const thisPlayer = this.players.filter(player => player.userID == userID)[0];
+		const opponents = this.players.filter(player => player.userID != userID);
+		// userID, number in hand, faceup
+		const opponentsCards = [];
+		opponents.forEach(opponent => {
+			opponentsCards.push([
+				opponent.userID,
+				opponent.cards.length,
+				opponent.cards.slice(1, 2)[0]
+			])
+		});
 		return {
-			playerHand: thisPlayer.cards[0],
+			// Only give player their hand and face up cards
+			playerHand: thisPlayer.cards.slice(0,2),
+			opponentsCards,
 			deckRemaining: this.deck.length,
 			gameStarted: this.gameStarted,
 			gameOver: this.gameOver,

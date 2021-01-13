@@ -57,9 +57,6 @@ beginBtn.addEventListener('click', (e) => {
         userID,
         roomID
     })
-    .then(response=> {
-        console.log(response.data)
-    })
     .catch(error => console.log(error))
 })
         
@@ -202,10 +199,18 @@ const handleGameData = (data) => {
             document.querySelector("#begin-game").classList.remove("hidden");
         }
     }
-    
+        
+    // GAME STATE CHANGES
+    if (curGame != undefined || game?.turn != curGame?.turn) {
+        game = curGame;
+        console.log("updated game: ");
+        console.dir(game);
+    }
+
     // GAME BEGINS
     if (game != undefined && curGame?.gameStarted == true) {
         // Hide game begin button
+        console.log("a game is begun");
         document.querySelector("#begin-game").classList.add("hidden");
         
         // Hide extra opponent slot
@@ -214,17 +219,10 @@ const handleGameData = (data) => {
             opponents[curUsers.length-1].classList.add('hidden');
         }
     }
-    
-    // GAME STATE CHANGES
-    if (curGame != undefined || game?.turn != curGame?.turn) {
-        game = curGame;
-        console.log("updated game: ");
-        console.dir(game);
-    }
 
     // GAME ENDS
     if (game != undefined && curGame?.gameOver == true) {
-        console.log("game over");
+        console.log("a game is ended");
         clearInterval(gameIntervalKey);
         // Need to give option to play again. Would be nice if players from lobby could join in between games
         // showLobby();
