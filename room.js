@@ -5,8 +5,6 @@ module.exports = class Room {
         this.roomID = ID;
         this.curUsers = [[ID, playerName], ];
         this.curGame = null;
-        this.gameStarted = false;
-        this.gameEnded = false;
         this.prevLoser = null;
     }
 
@@ -22,30 +20,26 @@ module.exports = class Room {
         this.curUsers.push([newUser, userName]);
     }
 
-    newGame(numPlayers) {
-        this.gameStarted = true;
-
+    newGame() {
         // Game setup
         this.curGame = new Game();
         
-        this.curGame.makePlayers(numPlayers);
+        this.curGame.makePlayers(this.curUsers);
         this.curGame.makeDeck();
         this.curGame.shuffleDeck();
         this.curGame.dealCards();
-        this.curGame.allowCardSwap();
+        // this.curGame.allowCardSwap();
         
         // Game start
         this.curGame.gameBegin();
     }
 
-    getRoomStatus() {
+    getRoomStatus(userID) {
         return {
             roomID: this.roomID,
             curUsers: this.curUsers,
-            curGame: this.curGame,
-            prevLoser: this.prevLoser,
-            gameStarted: this.gameStarted,
-            gameEnded: this.gameEnded
+            curGame: this.curGame?.getGameStatus(userID),
+            prevLoser: this.prevLoser
         };
     }
 }

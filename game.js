@@ -9,13 +9,16 @@ module.exports = class Game {
 		this.numPlayers = null;
 		this.deck = [];
 		this.players = [];
+		this.gameStarted = false;
 		this.gameOver = false;
+		this.activePlayer = null;
+		this.turn = 0;
 	}
 
-	makePlayers (numPlayers) {
-		this.numPlayers = numPlayers;
-		for (let i = 0; i < numPlayers; i++) {
-			this.players.push(new Player('player ' + (i+1)));
+	makePlayers (curUsers) {
+		this.numPlayers = curUsers.length;
+		for (let i = 0; i < this.numPlayers; i++) {
+			this.players.push(new Player(curUsers[i]));
 		}
 	}
 
@@ -67,7 +70,13 @@ module.exports = class Game {
 
 	gameBegin () {
 		console.log('a game is begun.');
-		console.log(`${this.goesFirst()} goes first.`);
+		this.gameStarted = true;
+		const activePlayer = this.goesFirst();
+		console.log(`${activePlayer.name} goes first.`);
+		while( this.gameOver != true) {
+			this.advanceGame(activePlayer);
+		}
+
 	}
 
 	goesFirst () {
@@ -140,14 +149,29 @@ module.exports = class Game {
 
 			decidingValue++;
 		}
-		return this.players[playerStarterStatus.indexOf(true)].name;
+		return this.players[playerStarterStatus.indexOf(true)];
 	}
-	getGameStatus() {
+	getGameStatus(userID) {
+		// Return what cards the user needs (user's hand + all face up cards)
+
+		// ping 5 turns for testing
+		if (this.turn < 2) {
+			this.turn++;
+		} else {
+			this.gameOver = true;
+		}
+		const thisPlayer = this.players.filter(player => player.userID == userID)[0];
 		return {
-			numPlayers: this.numPlayers = null,
-			deck: this.deck = [],
-			players: this.players = [],
-			gameOver: this.gameOver = false,
+			playerHand: thisPlayer.cards[0],
+			deckRemaining: this.deck.length,
+			gameStarted: this.gameStarted,
+			gameOver: this.gameOver,
+			turn: this.turn
         };
+	}
+
+	advanceGame(activePlayer) {
+		console.log("it's your turn, go "+ activePlayer.name);
+		this.gameOver = true;
 	}
 }

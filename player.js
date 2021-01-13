@@ -1,6 +1,7 @@
 module.exports = class Player {
-	constructor (name) {
-		this.name = name;
+	constructor (user) {
+		this.userID = user[0];
+		this.name = user[1];
 		this.cards = [ [], [], [] ];
 	}
 

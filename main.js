@@ -76,7 +76,7 @@ app.post('/begin', (req, res) => {
     const numPlayers = rooms[roomID].curUsers.length;
     // Game must have 3-5 players. Only host can start the game.
     if (2 < numPlayers && numPlayers < 6 && roomID == userID) {
-        rooms[roomID].newGame(numPlayers);
+        rooms[roomID].newGame();
         delete lobby[roomID];
     }
     res.end();
@@ -105,7 +105,7 @@ app.get('/roomStatus', (req, res) =>{
     const {roomID, userID} = req.query;
     if (rooms[roomID] != null && users[userID] != null) {
         const room = rooms[roomID];
-        res.json(room.getRoomStatus());
+        res.json(room.getRoomStatus(userID));
         
         // Update lastConnected timestamp
         users[userID]['lastConnected'] = Date.now();

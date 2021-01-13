@@ -5,8 +5,6 @@ this is where client js is located
 // Local data 
 window.players = [];
 window.game = null;
-window.started = false;
-window.ended = false;
 window.loser = null;
 
 // ROOM SETUP
@@ -143,7 +141,7 @@ const exitLobby = () => {
 // ROOM STATUS PING
 let gameIntervalKey = 0;
 const startRoomStatusPing = () => {
-    setInterval(()=> {
+    gameIntervalKey = setInterval(()=> {
         axios.get('./roomStatus', {
             params: {
                 roomID,
@@ -172,7 +170,7 @@ const exitGame = () => {
 }
 
 const handleGameData = (data) => {
-    const {roomID, curUsers, curGame, gameStarted, gameEnded, prevLoser} = data;
+    const {roomID, curUsers, curGame, prevLoser} = data;
     
     // Each if statement compares local data to incoming data. Updates and takes action if different.
 
@@ -206,8 +204,7 @@ const handleGameData = (data) => {
     }
     
     // GAME BEGINS
-    if (started != gameStarted) {
-        started = gameStarted;
+    if (game != undefined && curGame?.gameStarted == true) {
         // Hide game begin button
         document.querySelector("#begin-game").classList.add("hidden");
         
@@ -219,17 +216,18 @@ const handleGameData = (data) => {
     }
     
     // GAME STATE CHANGES
-    if (game != curGame) {
-        console.log("updated game");
+    if (curGame != undefined || game?.turn != curGame?.turn) {
         game = curGame;
+        console.log("updated game: ");
+        console.dir(game);
     }
 
     // GAME ENDS
-    if (ended != gameEnded) {
-        console.log("updated gameEnded");
-        ended = gameEnded;
+    if (game != undefined && curGame?.gameOver == true) {
+        console.log("game over");
+        clearInterval(gameIntervalKey);
         // Need to give option to play again. Would be nice if players from lobby could join in between games
-        showLobby();
+        // showLobby();
     }
 
     // NEW LOSER
