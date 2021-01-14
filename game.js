@@ -13,6 +13,7 @@ module.exports = class Game {
 		this.gameOver = false;
 		this.activePlayer = null;
 		this.turn = 0;
+		this.clockwise = true;
 	}
 
 	makePlayers (curUsers) {
@@ -71,7 +72,7 @@ module.exports = class Game {
 	gameBegin () {
 		console.log('a game is begun.');
 		this.gameStarted = true;
-		const activePlayer = this.goesFirst();
+		let activePlayer = this.goesFirst();
 		console.log(`${activePlayer.name} goes first.`);
 		while( this.gameOver != true) {
 			this.advanceGame(activePlayer);
@@ -79,6 +80,7 @@ module.exports = class Game {
 
 	}
 
+	// Returns player who goes first
 	goesFirst () {
 		// This variable increments if no single player is chosen at the end of each round.
 		let decidingValue = 3;
@@ -152,14 +154,6 @@ module.exports = class Game {
 		return this.players[playerStarterStatus.indexOf(true)];
 	}
 	getGameStatus(userID) {
-		// Return what cards the user needs (user's hand + all face up cards)
-
-		// ping 3 turns for testing
-		if (this.turn < 3) {
-			this.turn++;
-		} else {
-			this.gameOver = true;
-		}
 		const thisPlayer = this.players.filter(player => player.userID == userID)[0];
 		const opponents = this.players.filter(player => player.userID != userID);
 		// userID, number in hand, faceup
@@ -168,12 +162,13 @@ module.exports = class Game {
 			opponentsCards.push([
 				opponent.userID,
 				opponent.cards.length,
-				opponent.cards.slice(1, 2)[0]
+				opponent.cards.slice(1, 2)[0],
+				opponent.cards[2].length
 			])
 		});
 		return {
-			// Only give player their hand and face up cards
-			playerHand: thisPlayer.cards.slice(0,2),
+			// Only give player their hand, all face up cards on board, and number of face down cards
+			playerCards: [userID].concat(thisPlayer.cards.slice(0,2)).concat(thisPlayer.cards[2].length),
 			opponentsCards,
 			deckRemaining: this.deck.length,
 			gameStarted: this.gameStarted,
@@ -183,7 +178,7 @@ module.exports = class Game {
 	}
 
 	advanceGame(activePlayer) {
-		console.log("it's your turn, go "+ activePlayer.name);
+		console.log("it's your turn. Go, "+ activePlayer.name);
 		this.gameOver = true;
 	}
 }

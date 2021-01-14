@@ -77,11 +77,6 @@
 	align-items: center;
 	flex-flow: wrap column;
 	padding: 2rem;
-	&__cards {
-	}
-	&__hand {
-		justify-self: flex-end;
-	}
 }
 
 .opponent {
@@ -106,5 +101,10 @@
 		align-self: flex-start;
 		text-transform: uppercase;
 		color: black;
+	}
+	&__cards {
+	}
+	&__hand {
+		justify-self: flex-end;
 	}
 }

@@ -203,8 +203,7 @@ const handleGameData = (data) => {
     // GAME STATE CHANGES
     if (curGame != undefined || game?.turn != curGame?.turn) {
         game = curGame;
-        console.log("updated game: ");
-        console.dir(game);
+        updateCards(game);
     }
 
     // GAME BEGINS
@@ -235,3 +234,74 @@ const handleGameData = (data) => {
     }
     
 };
+
+const updateCards = (game) => {
+    const { playerCards, opponentsCards, deckRemaining } = game;
+
+    // Update cards in deck remaining
+    document.getElementById("deckRemaining").innerText = deckRemaining;
+
+    // Update player hand
+    const playerHand = document.querySelector('.player-1__hand');
+    playerHand.innerHTML = "";
+    for (const card of playerCards[1]) {
+        const link = document.createElement('a');
+        link.setAttribute('href', "#");
+        link.setAttribute('class', "card-link");
+        const p = document.createElement('p');
+        p.innerText = card['title'];
+        p.setAttribute('data-card', card['title']);
+        link.appendChild(p);
+        playerHand.appendChild(link);
+    }
+
+    // Update player face up
+    const playerFaceUp = document.querySelector('.player-1__face-up');
+    playerFaceUp.innerHTML = "";
+    for (const card of playerCards[2]) {
+        const link = document.createElement('a');
+        link.setAttribute('href', "#");
+        link.setAttribute('class', "card-link");
+        const p = document.createElement('p');
+        p.innerText = card['title'];
+        p.setAttribute('data-card', card['title']);
+        link.appendChild(p);
+        playerFaceUp.appendChild(link);
+    }
+    
+    // Update number of face down cards
+    const playerFaceDown = document.querySelector('.player-1__face-down');
+    playerFaceDown.innerHTML = "";
+    for (let i = 0; i < playerCards[3]; i++) {
+        const link = document.createElement('a');
+        link.setAttribute('href', "#");
+        link.setAttribute('class', "card-link");
+        const p = document.createElement('p');
+        p.innerText = "???";
+        p.setAttribute('data-card', "faceDown"+i);
+        link.appendChild(p);
+        playerFaceDown.appendChild(link);
+    }
+
+    // Make player cards clickable
+    const allCardLinks = document.getElementsByClassName('card-link');
+    for (const link of allCardLinks) {
+        link.addEventListener('click', (e)=>{
+            e.preventDefault();
+            const cardData = e.target.dataset.card;
+            axios.post('/gameAction', {userID, cardData})
+            .then(response => {
+                console.log(response.data);
+                
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        })
+    };
+
+
+    // Update opponents cards
+    console.dir(opponentsCards);
+
+}

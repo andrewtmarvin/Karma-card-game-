@@ -213,10 +213,6 @@ body {
   padding: 2rem;
 }
 
-.user-space__hand {
-  justify-self: flex-end;
-}
-
 .opponent {
   -ms-flex-preferred-size: 100%;
       flex-basis: 100%;
@@ -240,6 +236,11 @@ body {
       align-self: flex-start;
   text-transform: uppercase;
   color: black;
+}
+
+.opponent__hand,
+.player-1__hand {
+  justify-self: flex-end;
 }
 
 .game-lobby {
