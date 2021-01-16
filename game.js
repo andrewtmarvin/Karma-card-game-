@@ -8,6 +8,8 @@ module.exports = class Game {
 	constructor () {
 		this.numPlayers = null;
 		this.deck = [];
+		this.pile = [];
+		this.burned = [];
 		this.players = [];
 		this.gameStarted = false;
 		this.gameOver = false;
@@ -70,14 +72,9 @@ module.exports = class Game {
 	}
 
 	gameBegin () {
-		console.log('a game is begun.');
 		this.gameStarted = true;
-		let activePlayer = this.goesFirst();
-		console.log(`${activePlayer.name} goes first.`);
-		while( this.gameOver != true) {
-			this.advanceGame(activePlayer);
-		}
-
+		this.activePlayer = this.goesFirst();
+		console.log(`${this.activePlayer.name} goes first.`);
 	}
 
 	// Returns player who goes first
@@ -134,7 +131,7 @@ module.exports = class Game {
 				let highestCount = Math.max(...counter);
 				if (counter.indexOf(highestCount) === counter.lastIndexOf(highestCount)) {
 					console.log(`one player has more of the decidingValue card ${decidingValue}`);
-					return x[counter.indexOf(highestCount)].name;
+					return x[counter.indexOf(highestCount)];
 				} else {
 					console.log(
 						`players have the same number of decidingValue card ${decidingValue}, continue to next round...`
@@ -150,13 +147,17 @@ module.exports = class Game {
 			}
 
 			decidingValue++;
+			// Certain scenarios result in unexplained infinite loop. Just let host start
+			if (decidingValue > 15) {
+				return this.players[0];
+			}
 		}
 		return this.players[playerStarterStatus.indexOf(true)];
 	}
 	getGameStatus(userID) {
 		const thisPlayer = this.players.filter(player => player.userID == userID)[0];
 		const opponents = this.players.filter(player => player.userID != userID);
-		// userID, number in hand, faceup
+		// userID, number in hand, faceup, number of facedown
 		const opponentsCards = [];
 		opponents.forEach(opponent => {
 			opponentsCards.push([
@@ -171,14 +172,31 @@ module.exports = class Game {
 			playerCards: [userID].concat(thisPlayer.cards.slice(0,2)).concat(thisPlayer.cards[2].length),
 			opponentsCards,
 			deckRemaining: this.deck.length,
+			pile: this.pile,
+			activePlayer: this.activePlayer.userID,
 			gameStarted: this.gameStarted,
 			gameOver: this.gameOver,
 			turn: this.turn
         };
 	}
 
-	advanceGame(activePlayer) {
-		console.log("it's your turn. Go, "+ activePlayer.name);
-		this.gameOver = true;
+	advanceGame(userID, playerMove) {
+		if (this.activePlayer['userID'] == userID) {
+			
+			// Face down
+			if (playerMove.slice(4,8) == "Down") {
+				// Retrieve face down card title
+				const cardIndex = parseInt([playerMove[8]]);
+				playerMove = this.activePlayer.cards[2][cardIndex].title;
+				console.log(playerMove);
+				this.pile.push(this.activePlayer.playCard(playerMove));
+			// Hand or face up
+			} else {
+				// Need to distinguish btw hand and face up and only allow face up to be played when hand is empty
+				this.pile.push(this.activePlayer.playCard(playerMove));
+			}
+		} else {
+			console.log("Someone tried to play but it wasn't their turn");
+		}
 	}
 }

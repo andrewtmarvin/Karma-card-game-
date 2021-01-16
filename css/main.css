@@ -227,6 +227,11 @@ body {
   margin-bottom: auto;
 }
 
+.opponent__cards > p {
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
 .opponent__name,
 .player-1__name {
   font-family: 'Righteous', cursive;
@@ -238,9 +243,19 @@ body {
   color: black;
 }
 
+.opponent__cards > p,
+.player-1__cards > p {
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
 .opponent__hand,
 .player-1__hand {
   justify-self: flex-end;
+}
+
+.active-player {
+  border: 1rem silver solid;
 }
 
 .game-lobby {

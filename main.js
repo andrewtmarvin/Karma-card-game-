@@ -84,8 +84,10 @@ app.post('/begin', (req, res) => {
 
 app.post('/gameAction', (req, res) => {
     // Game logic
-    const {userID, cardData} = req.body;
-    res.send("Player " + userID + " clicked on card: " + cardData);
+    const {roomID, userID, cardData} = req.body;
+    const game = rooms[roomID]?.curGame;
+    game.advanceGame(userID, cardData)
+    res.end();
 });
 
 // Send back username and roomID of users who have clicked to host a game

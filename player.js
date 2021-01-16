@@ -5,8 +5,14 @@ module.exports = class Player {
 		this.cards = [ [], [], [] ];
 	}
 
-	playCard () {
-		console.log(`a card is played by ${this.name}.`);
+	playCard (playerMove) {
+		for (let i = 0; i < 3; i++){
+			for (let j = 0; i < this.cards[i].length; j++) {
+				if (this.cards[i][j]['title'] == playerMove) {
+					return this.cards[i].pop(j);
+				}
+			}
+		}
 	}
 
 	drawCard () {
@@ -14,11 +20,11 @@ module.exports = class Player {
 		console.log('a card is drawn.');
 	}
 
-	pickUpDeck () {
-		console.log('a deck is picked up.');
+	pickUpPile () {
+		console.log('a pile is picked up.');
 	}
 
 	swapCards () {
-		console.log('some cards are swapped.');
+		console.log('cards are swapped.');
 	}
 }

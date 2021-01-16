@@ -175,19 +175,29 @@ const handleGameData = (data) => {
     // PLAYER JOINS
     if (players.length != curUsers.length) {
         players = curUsers;
-        // Update names in UI
+
+        // Update names in UI and ID data in DOM
+        const playerDivs = [document.querySelector(".player-1"), 
+        document.querySelector("#player2"),
+        document.querySelector("#player3"), 
+        document.querySelector("#player4"),
+        document.querySelector("#player5"),];
+
         const playerNames = [document.querySelector(".player-1__name"), 
         document.querySelector("#player2 > .opponent__name"),
         document.querySelector("#player3 > .opponent__name"), 
         document.querySelector("#player4 > .opponent__name"),
         document.querySelector("#player5 > .opponent__name"),];
+
         // Each player plays from the large bottom player-1 area
         for (let i = 0, j = 0; i < players.length; i++, j++) {
             if (players[i][0] == userID) {
                 playerNames[0].innerText = players[i][1];
+                playerDivs[0].setAttribute('data-userID', userID);
                 j--;
             } else {
                 playerNames[j+1].innerText = players[i][1];
+                playerDivs[j+1].setAttribute('data-userID', players[i][0]);
                 // Reveal next open player slot
                 if (j < 3) {
                     playerNames[j+2].parentElement.classList.remove('hidden');
@@ -204,12 +214,15 @@ const handleGameData = (data) => {
     if (curGame != undefined || game?.turn != curGame?.turn) {
         game = curGame;
         updateCards(game);
+        // Give activePlayer visual cue in UI
+        document.querySelector('.active-player')?.classList?.remove('active-player');
+        document.querySelector(`div[data-userid='${game.activePlayer}'`).classList.add('active-player');
+
     }
 
     // GAME BEGINS
     if (game != undefined && curGame?.gameStarted == true) {
         // Hide game begin button
-        console.log("a game is begun");
         document.querySelector("#begin-game").classList.add("hidden");
         
         // Hide extra opponent slot
@@ -238,10 +251,17 @@ const handleGameData = (data) => {
 const updateCards = (game) => {
     const { playerCards, opponentsCards, deckRemaining } = game;
 
-    // Update cards in deck remaining
+    // GAME PLAY AREA SECTION
+    // Deck remaining
     document.getElementById("deckRemaining").innerText = deckRemaining;
 
-    // Update player hand
+    // Pile
+
+    // Burn
+
+
+    // UPDATE PLAYER SECTION
+    // Hand
     const playerHand = document.querySelector('.player-1__hand');
     playerHand.innerHTML = "";
     for (const card of playerCards[1]) {
@@ -255,7 +275,7 @@ const updateCards = (game) => {
         playerHand.appendChild(link);
     }
 
-    // Update player face up
+    // Face up
     const playerFaceUp = document.querySelector('.player-1__face-up');
     playerFaceUp.innerHTML = "";
     for (const card of playerCards[2]) {
@@ -269,7 +289,7 @@ const updateCards = (game) => {
         playerFaceUp.appendChild(link);
     }
     
-    // Update number of face down cards
+    // Number of face down
     const playerFaceDown = document.querySelector('.player-1__face-down');
     playerFaceDown.innerHTML = "";
     for (let i = 0; i < playerCards[3]; i++) {
@@ -283,25 +303,52 @@ const updateCards = (game) => {
         playerFaceDown.appendChild(link);
     }
 
-    // Make player cards clickable
+    // Make cards clickable
     const allCardLinks = document.getElementsByClassName('card-link');
     for (const link of allCardLinks) {
         link.addEventListener('click', (e)=>{
             e.preventDefault();
             const cardData = e.target.dataset.card;
-            axios.post('/gameAction', {userID, cardData})
-            .then(response => {
-                console.log(response.data);
-                
-            })
+            axios.post('/gameAction', {roomID, userID, cardData})
             .catch(error => {
                 console.log(error);
             })
         })
     };
 
+    // UPDATE OPPONENTS SECTION
+    for (const cards of opponentsCards) {
+        const opponentDiv = document.querySelector(`div[data-userid="${cards[0]}"]`);
+        
+        // Hand
+        const opponentHand = opponentDiv.querySelector('.opponent__hand');
+        const handCards = document.createElement('p');
+        for(let i = 0; i < cards[1]; i++) {
+            handCards.innerText += "?";
+        }
+        opponentHand.innerHTML = "";
+        opponentHand.appendChild(handCards);
+        
+        // Face up
+        const opponentFaceUp = opponentDiv.querySelector('.opponent__face-up');
+        opponentFaceUp.innerHTML = "";
+        for (const card of cards[2]) {
 
-    // Update opponents cards
-    console.dir(opponentsCards);
+            const faceUpCard = document.createElement('p');
+            faceUpCard.innerText = card['title'];
+            faceUpCard.setAttribute('data-card', card['title']);
+
+            opponentFaceUp.appendChild(faceUpCard);
+        }
+        
+        // Face down
+        const opponentFaceDown = opponentDiv.querySelector('.opponent__face-down');
+        const faceDownCards = document.createElement('p');
+        for(let i = 0; i < cards[3]; i++) {
+            faceDownCards.innerText += "?";
+        }
+        opponentFaceDown.innerHTML = "";
+        opponentFaceDown.appendChild(faceDownCards);
+    }
 
 }

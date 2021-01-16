@@ -87,6 +87,10 @@
 		margin-bottom: auto;
 	}
 	&__cards {
+		& > p {
+			font-size: 1.5rem;
+			font-weight: 900;
+		}
 	}
 	&__hands {
 	}
@@ -103,8 +107,16 @@
 		color: black;
 	}
 	&__cards {
+		& > p {
+			font-size: 1.5rem;
+			font-weight: 900;
+		}
 	}
 	&__hand {
 		justify-self: flex-end;
 	}
+}
+
+.active-player {
+	border: 1rem silver solid;
 }
