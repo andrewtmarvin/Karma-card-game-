@@ -190,20 +190,21 @@ const handleGameData = (data) => {
         document.querySelector("#player5 > .opponent__name"),];
 
         // Each player plays from the large bottom player-1 area
-        for (let i = 0, j = 0; i < players.length; i++, j++) {
-            if (players[i][0] == userID) {
-                playerNames[0].innerText = players[i][1];
-                playerDivs[0].setAttribute('data-userID', userID);
-                j--;
-            } else {
-                playerNames[j+1].innerText = players[i][1];
-                playerDivs[j+1].setAttribute('data-userID', players[i][0]);
-                // Reveal next open player slot
-                if (j < 3) {
-                    playerNames[j+2].parentElement.classList.remove('hidden');
-                }
+        while (true) {
+            // Reorder players until player is at the bottom of the stack
+            if (players[0][0] != userID) {
+                players.push(players.shift());
+                continue;
+            } 
+            // Once player is at the bottom of the stack, fill UI clockwise
+            for (let i = 0; i < players.length; i++) {
+                playerNames[i].innerText = players[i][1];
+                playerDivs[i].setAttribute('data-userID', players[i][0]);
+                playerDivs[i].classList.remove('hidden');
             }
+            break;
         }
+        
         // Display game begin game button for host when at least 3 players
         if (curUsers.length >= 3 && userID == roomID) {
             document.querySelector("#begin-game").classList.remove("hidden");
