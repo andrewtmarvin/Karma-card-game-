@@ -7,8 +7,8 @@ module.exports = class Player {
 
 	playCard (playerMove) {
 		for (let i = 0; i < 3; i++){
-			for (let j = 0; i < this.cards[i].length; j++) {
-				if (this.cards[i][j]['title'] == playerMove) {
+			for (let j = 0; j < this.cards[i].length; j++) {
+				if (this.cards[i][j]?.['title'] == playerMove) {
 					return this.cards[i].pop(j);
 				}
 			}

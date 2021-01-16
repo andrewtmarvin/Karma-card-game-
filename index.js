@@ -167,7 +167,7 @@ const exitGame = () => {
 }
 
 const handleGameData = (data) => {
-    const {roomID, curUsers, curGame, prevLoser} = data;
+    const { roomID, curUsers, curGame, prevLoser } = data;
     
     // Each if statement compares local data to incoming data. Updates and takes action if different.
 
@@ -204,7 +204,7 @@ const handleGameData = (data) => {
             }
             break;
         }
-        
+
         // Display game begin game button for host when at least 3 players
         if (curUsers.length >= 3 && userID == roomID) {
             document.querySelector("#begin-game").classList.remove("hidden");
@@ -212,7 +212,7 @@ const handleGameData = (data) => {
     }
         
     // GAME STATE CHANGES
-    if (curGame != undefined || game?.turn != curGame?.turn) {
+    if (curGame != undefined && game?.turn != curGame?.turn) {
         game = curGame;
         updateCards(game);
         // Give activePlayer visual cue in UI
@@ -298,7 +298,7 @@ const updateCards = (game) => {
         link.setAttribute('href', "#");
         link.setAttribute('class', "card-link");
         const p = document.createElement('p');
-        p.innerText = "???";
+        p.innerText = "? ? ?";
         p.setAttribute('data-card', "faceDown"+i);
         link.appendChild(p);
         playerFaceDown.appendChild(link);
@@ -325,7 +325,7 @@ const updateCards = (game) => {
         const opponentHand = opponentDiv.querySelector('.opponent__hand');
         const handCards = document.createElement('p');
         for(let i = 0; i < cards[1]; i++) {
-            handCards.innerText += "?";
+            handCards.innerText += "? ";
         }
         opponentHand.innerHTML = "";
         opponentHand.appendChild(handCards);
@@ -346,7 +346,7 @@ const updateCards = (game) => {
         const opponentFaceDown = opponentDiv.querySelector('.opponent__face-down');
         const faceDownCards = document.createElement('p');
         for(let i = 0; i < cards[3]; i++) {
-            faceDownCards.innerText += "?";
+            faceDownCards.innerText += "? ";
         }
         opponentFaceDown.innerHTML = "";
         opponentFaceDown.appendChild(faceDownCards);

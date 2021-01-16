@@ -162,7 +162,7 @@ module.exports = class Game {
 		opponents.forEach(opponent => {
 			opponentsCards.push([
 				opponent.userID,
-				opponent.cards.length,
+				opponent.cards[0].length,
 				opponent.cards.slice(1, 2)[0],
 				opponent.cards[2].length
 			])
@@ -195,6 +195,7 @@ module.exports = class Game {
 				// Need to distinguish btw hand and face up and only allow face up to be played when hand is empty
 				this.pile.push(this.activePlayer.playCard(playerMove));
 			}
+			this.turn++;
 		} else {
 			console.log("Someone tried to play but it wasn't their turn");
 		}
