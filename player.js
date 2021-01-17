@@ -9,7 +9,7 @@ module.exports = class Player {
 		for (let i = 0; i < 3; i++){
 			for (let j = 0; j < this.cards[i].length; j++) {
 				if (this.cards[i][j]?.['title'] == playerMove) {
-					return this.cards[i].pop(j);
+					return this.cards[i].splice(j, 1)[0];
 				}
 			}
 		}

@@ -250,13 +250,14 @@ const handleGameData = (data) => {
 };
 
 const updateCards = (game) => {
-    const { playerCards, opponentsCards, deckRemaining } = game;
+    const { playerCards, opponentsCards, deckRemaining, pile } = game;
 
     // GAME PLAY AREA SECTION
     // Deck remaining
     document.getElementById("deckRemaining").innerText = deckRemaining;
 
     // Pile
+    document.querySelector(".play-area__pile-cards").innerText = `Top card: ${pile[pile.length-1]?.title || 'pile empty'}`;
 
     // Burn
 
@@ -272,6 +273,7 @@ const updateCards = (game) => {
         const p = document.createElement('p');
         p.innerText = card['title'];
         p.setAttribute('data-card', card['title']);
+        p.classList.add("card");
         link.appendChild(p);
         playerHand.appendChild(link);
     }
@@ -286,6 +288,7 @@ const updateCards = (game) => {
         const p = document.createElement('p');
         p.innerText = card['title'];
         p.setAttribute('data-card', card['title']);
+        p.classList.add("card");
         link.appendChild(p);
         playerFaceUp.appendChild(link);
     }
@@ -300,6 +303,7 @@ const updateCards = (game) => {
         const p = document.createElement('p');
         p.innerText = "? ? ?";
         p.setAttribute('data-card', "faceDown"+i);
+        p.classList.add("card");
         link.appendChild(p);
         playerFaceDown.appendChild(link);
     }
@@ -338,6 +342,7 @@ const updateCards = (game) => {
             const faceUpCard = document.createElement('p');
             faceUpCard.innerText = card['title'];
             faceUpCard.setAttribute('data-card', card['title']);
+            faceUpCard.classList.add("card");
 
             opponentFaceUp.appendChild(faceUpCard);
         }

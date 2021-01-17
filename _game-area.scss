@@ -107,16 +107,34 @@
 		color: black;
 	}
 	&__cards {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: auto;
+		gap: 2rem;
+
 		& > p {
 			font-size: 1.5rem;
 			font-weight: 900;
 		}
 	}
 	&__hand {
-		justify-self: flex-end;
+		grid-row: 2 / 3;
+		grid-column: 1 / 2;
+	}
+	&__face-up {
+		grid-row: 2 / 3;
+		grid-column: 2 / 3;
+	}
+	&__face-down {
+		grid-row: 2 / 3;
+		grid-column: 3 / 4;
 	}
 }
 
 .active-player {
 	border: 1rem silver solid;
+}
+
+.card {
+	margin-bottom: 2rem;
 }

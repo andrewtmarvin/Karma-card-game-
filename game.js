@@ -188,13 +188,11 @@ module.exports = class Game {
 				// Retrieve face down card title
 				const cardIndex = parseInt([playerMove[8]]);
 				playerMove = this.activePlayer.cards[2][cardIndex].title;
-				console.log(playerMove);
-				this.pile.push(this.activePlayer.playCard(playerMove));
-			// Hand or face up
-			} else {
-				// Need to distinguish btw hand and face up and only allow face up to be played when hand is empty
-				this.pile.push(this.activePlayer.playCard(playerMove));
 			}
+
+			// Need to distinguish btw hand and face up and only allow face up to be played when hand is empty
+			this.pile.push(this.activePlayer.playCard(playerMove));
+			
 			this.turn++;
 		} else {
 			console.log("Someone tried to play but it wasn't their turn");
