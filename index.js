@@ -122,7 +122,7 @@ const startLobbyStatusPing = () => {
         .catch(error => {
             console.log(error);
         })
-    }, 1000);
+    }, 500);
 }
 
 const exitLobby = () => {
@@ -153,7 +153,7 @@ const startRoomStatusPing = () => {
         .catch(error => {
             console.log(error);
         })
-    }, 2000);
+    }, 500);
 }
 
 const exitGame = () => {

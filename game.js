@@ -78,7 +78,6 @@ module.exports = class Game {
 		this.gameStarted = true;
 		const firstPlayID = this.goesFirst()['userID'];
 		this.jumpRotate(firstPlayID);
-		console.log(`${this.activePlayer.name} goes first.`);
 	}
 
 	// Returns player who goes first
@@ -205,19 +204,76 @@ module.exports = class Game {
 
 	advanceGame(userID, playerMove) {
 		if (this.activePlayer['userID'] == userID) {
-			
-			// Face down
+			// Retrieve face down card title
 			if (playerMove.slice(4,8) == "Down") {
-				// Retrieve face down card title
 				const cardIndex = parseInt([playerMove[8]]);
 				playerMove = this.activePlayer.cards[2][cardIndex].title;
 			}
+			if (this.moveAllowed(playerMove)){
+				this.pile.push(this.activePlayer.playCard(playerMove));
+				this.rotate();
+			}
 
-			// Need to distinguish btw hand and face up and only allow face up to be played when hand is empty
-			this.pile.push(this.activePlayer.playCard(playerMove));
-			this.rotate();
+			
 		} else {
 			console.log("Someone tried to play but it wasn't their turn");
 		}
+		
+	}
+	moveAllowed(playerMove) {
+		// Needed for legality checks
+		let playerMoveValue;
+		let pileType = this.pile[this.pile.length-1]?.['type'];
+		let pileValue = this.pile[this.pile.length-1]?.['value'];
+
+		// Locate the card
+		for (let i = 0; i < 3; i++){
+			for (let j = 0; j < this.activePlayer.cards[i].length; j++) {
+				// Check that playerMove is from allowed cards (hand, faceup, facedown)
+				if (this.activePlayer.cards[i][j]?.['title'] == playerMove) {
+					// Extract card value for later comparison
+					playerMoveValue = this.activePlayer.cards[i][j]['value'];
+					if (i == 0) {
+						// Always allow cards in hand to be played
+					} else if (i == 1 && this.activePlayer.cards[0].length == 0) {
+						// Allow face up cards to be played only when hand is empty
+					} else if (i == 2 && this.activePlayer.cards[0].length == 0 && this.activePlayer.cards[1].length == 0) {
+						// Allow face down cards to be played only when hand and face up cards are empty
+					} else {
+						return false;
+					}
+
+					// Allow any card to be played on empty pile or a 2
+					if (this.pile.length == 0 || pileType == "2") {
+						return true;
+					}
+
+					// 3 or Joker looks at the previous card, can look past any number of 3s, 2s, and Jokers
+					if (["3", "Joker"].includes(pileType)){
+						let i = 1;
+						while (pileValue == undefined) {
+							// Hit the bottom of the pile, still only 3s, 2s, and Jokers, return true
+							if (this.pile[this.pile.length-i] == undefined) {
+								console.log('all jokers, twos, and threes, play please');
+								return true;
+							}
+							pileValue = this.pile[this.pile.length - i]['value'];
+							i++;
+						}
+					}					
+
+					// Seven rule
+					if (pileValue == 7 && playerMoveValue >= 7) {
+						return false;
+					} 
+
+					// General value rule
+					if (pileValue > playerMoveValue) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 }
