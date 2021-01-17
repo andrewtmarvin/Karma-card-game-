@@ -11,17 +11,20 @@ module.exports = class Game {
 		this.pile = [];
 		this.burned = [];
 		this.players = [];
+		this.rotation = [];
+		this.clockwise = true;
+		this.turn = 0;
+		this.activePlayer = null;
 		this.gameStarted = false;
 		this.gameOver = false;
-		this.activePlayer = null;
-		this.turn = 0;
-		this.clockwise = true;
 	}
 
 	makePlayers (curUsers) {
 		this.numPlayers = curUsers.length;
 		for (let i = 0; i < this.numPlayers; i++) {
-			this.players.push(new Player(curUsers[i]));
+			const newPlayer = new Player(curUsers[i]);
+			this.players.push(newPlayer);
+			this.rotation.push(newPlayer);
 		}
 	}
 
@@ -73,7 +76,8 @@ module.exports = class Game {
 
 	gameBegin () {
 		this.gameStarted = true;
-		this.activePlayer = this.goesFirst();
+		const firstPlayID = this.goesFirst()['userID'];
+		this.jumpRotate(firstPlayID);
 		console.log(`${this.activePlayer.name} goes first.`);
 	}
 
@@ -180,6 +184,25 @@ module.exports = class Game {
         };
 	}
 
+	rotate() {
+		if (this.clockwise) {
+			this.rotation.push(this.rotation.shift());
+			this.activePlayer = this.rotation [0];
+		} else {
+			this.rotation.unshift(this.rotation.pop());
+			this.activePlayer = this.rotation[this.rotation.length-1];
+		}
+		this.turn++;
+	}
+
+	jumpRotate(userID) {
+		while (this.rotation[0]['userID'] != userID) {
+			this.rotation.unshift(this.rotation.pop());
+		}
+		this.activePlayer = this.rotation[0];
+		this.turn++;
+	}
+
 	advanceGame(userID, playerMove) {
 		if (this.activePlayer['userID'] == userID) {
 			
@@ -192,8 +215,7 @@ module.exports = class Game {
 
 			// Need to distinguish btw hand and face up and only allow face up to be played when hand is empty
 			this.pile.push(this.activePlayer.playCard(playerMove));
-			
-			this.turn++;
+			this.rotate();
 		} else {
 			console.log("Someone tried to play but it wasn't their turn");
 		}
