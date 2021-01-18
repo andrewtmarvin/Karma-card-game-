@@ -3,6 +3,7 @@
 	height: 100%;
 	display: grid;
 	grid-template-rows: 30% 30% 40%;
+	font-size: 1.4rem;
 }
 .opponent-area {
 	grid-row: 1 / 2;
@@ -24,25 +25,47 @@
 	grid-template-columns: repeat(3, 1fr);
 	justify-items: center;
 	padding: 1rem;
+	font-size: 2rem;
+
 	&__deck {
-		height: 100px;
-		width: 100px;
+		height: 150px;
+		width: 200px;
 		background-color: green;
 	}
 	&__pile {
-		height: 100px;
-		width: 100px;
-		background-color: purple;
+		height: 150px;
+		width: 200px;
+		background-color: lightseagreen;
+		display: flex;
+		flex-flow: column nowrap;
 	}
 	&__burned {
-		height: 100px;
-		width: 100px;
+		height: 150px;
+		width: 200px;
 		background-color: brown;
 	}
 	&__btn {
 		grid-column: 2 / 3;
 		justify-self: center;
 		align-self: end;
+	}
+}
+
+.duplicate-or-pass {
+	z-index: 100;
+
+	& .btn {
+		background-color: white;
+	}
+}
+
+.pick-up-pile {
+	&__btn {
+		align-self: center;
+		margin-top: auto;
+		padding: 0;
+		background-color: white;
+		z-index: 100;
 	}
 }
 
@@ -137,11 +160,4 @@
 
 .card {
 	margin-bottom: 2rem;
-}
-
-.duplicate-or-pass {
-	& .btn {
-		background-color: white;
-		z-index: 100;
-	}
 }

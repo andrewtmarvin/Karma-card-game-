@@ -189,6 +189,9 @@ module.exports = class Game {
 	}
 
 	rotate() {
+		while(this.activePlayer.cards[0].length < 3 && this.deck.length > 0) {
+			this.activePlayer.drawCard(this.deck.pop());
+		}
 		if (this.details.clockwise) {
 			this.rotation.push(this.rotation.shift());
 			this.activePlayer = this.rotation [0];
@@ -205,6 +208,9 @@ module.exports = class Game {
 			this.rotation.unshift(this.rotation.pop());
 		}
 		this.activePlayer = this.rotation[0];
+		while(this.activePlayer.cards[0].length < 3 && this.deck.length > 0) {
+			this.activePlayer.drawCard(this.deck.pop());
+		}
 		this.details.turn++;
 	}
 
@@ -216,6 +222,17 @@ module.exports = class Game {
 				this.details.duplicates = false;
 				return;
 			}
+			// Short circuit if user is picking up pile
+			if (playerMove == "pickup") {
+				if (this.pile.length > 0){
+					this.activePlayer.cards[0].push(...this.pile);
+					this.pile = [];
+					this.rotate();
+					return;
+				} else {
+					return;
+				}
+			}
 
 			// Retrieve face down card title
 			if (playerMove.slice(4,8) == "Down") {
@@ -225,6 +242,7 @@ module.exports = class Game {
 			if (this.moveAllowed(playerMove)){
 				const { playedCard, duplicates } = this.activePlayer.playCard(playerMove);
 				this.pile.push(playedCard);
+				
 				if (duplicates > 1) {
 					this.details.turn++;
 					this.details.duplicates = true;

@@ -26,9 +26,8 @@ module.exports = class Player {
 		}
 	}
 
-	drawCard () {
+	drawCard (card) {
 		this.cards[0].push(card);
-		console.log('a card is drawn.');
 	}
 
 	pickUpPile () {
