@@ -302,6 +302,11 @@ body {
   margin-bottom: 2rem;
 }
 
+.duplicate-or-pass .btn {
+  background-color: white;
+  z-index: 100;
+}
+
 .game-lobby {
   background: snow;
   height: 100%;
@@ -361,5 +366,11 @@ body {
 
 .player-name-form > *:last-child {
   margin-bottom: auto;
+}
+
+.join-link p {
+  padding: 2rem;
+  font-size: 2rem;
+  background-color: gray;
 }
 /*# sourceMappingURL=main.css.map */

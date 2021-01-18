@@ -138,3 +138,10 @@
 .card {
 	margin-bottom: 2rem;
 }
+
+.duplicate-or-pass {
+	& .btn {
+		background-color: white;
+		z-index: 100;
+	}
+}

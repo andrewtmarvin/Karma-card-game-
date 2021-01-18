@@ -250,7 +250,7 @@ const handleGameData = (data) => {
 };
 
 const updateCards = (game) => {
-    const { playerCards, opponentsCards, deckRemaining, pile } = game;
+    const { playerCards, opponentsCards, deckRemaining, pile, duplicates, activePlayer } = game;
 
     // GAME PLAY AREA SECTION
     // Deck remaining
@@ -320,6 +320,13 @@ const updateCards = (game) => {
             })
         })
     };
+
+    // Allow pass or play of duplicate cards
+    if (activePlayer == userID && duplicates) {
+        document.querySelector(".duplicate-or-pass").classList.remove("hidden");
+    } else {
+        document.querySelector(".duplicate-or-pass").classList.add("hidden");
+    }
 
     // UPDATE OPPONENTS SECTION
     for (const cards of opponentsCards) {

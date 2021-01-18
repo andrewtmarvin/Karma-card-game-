@@ -12,11 +12,15 @@ module.exports = class Game {
 		this.burned = [];
 		this.players = [];
 		this.rotation = [];
-		this.clockwise = true;
-		this.turn = 0;
 		this.activePlayer = null;
-		this.gameStarted = false;
-		this.gameOver = false;
+		this.details = {
+			clockwise : true,
+			turn : 0,
+			duplicates : false,
+			gameStarted : false,
+			gameOver : false,
+
+		}
 	}
 
 	makePlayers (curUsers) {
@@ -75,7 +79,7 @@ module.exports = class Game {
 	}
 
 	gameBegin () {
-		this.gameStarted = true;
+		this.details.gameStarted = true;
 		const firstPlayID = this.goesFirst()['userID'];
 		this.jumpRotate(firstPlayID);
 	}
@@ -177,41 +181,57 @@ module.exports = class Game {
 			deckRemaining: this.deck.length,
 			pile: this.pile,
 			activePlayer: this.activePlayer.userID,
-			gameStarted: this.gameStarted,
-			gameOver: this.gameOver,
-			turn: this.turn
+			gameStarted: this.details.gameStarted,
+			gameOver: this.details.gameOver,
+			turn: this.details.turn,
+			duplicates: this.details.duplicates
         };
 	}
 
 	rotate() {
-		if (this.clockwise) {
+		if (this.details.clockwise) {
 			this.rotation.push(this.rotation.shift());
 			this.activePlayer = this.rotation [0];
 		} else {
 			this.rotation.unshift(this.rotation.pop());
 			this.activePlayer = this.rotation[this.rotation.length-1];
 		}
-		this.turn++;
+		this.details.turn++;
 	}
 
+	// Jump to the player who is starting the game, or the player who burns the pile out of turn
 	jumpRotate(userID) {
 		while (this.rotation[0]['userID'] != userID) {
 			this.rotation.unshift(this.rotation.pop());
 		}
 		this.activePlayer = this.rotation[0];
-		this.turn++;
+		this.details.turn++;
 	}
 
 	advanceGame(userID, playerMove) {
 		if (this.activePlayer['userID'] == userID) {
+			// Short circuit if user is passing instead of playing a duplicate card
+			if (playerMove == "pass") {
+				this.rotate();
+				this.details.duplicates = false;
+				return;
+			}
+
 			// Retrieve face down card title
 			if (playerMove.slice(4,8) == "Down") {
 				const cardIndex = parseInt([playerMove[8]]);
 				playerMove = this.activePlayer.cards[2][cardIndex].title;
 			}
 			if (this.moveAllowed(playerMove)){
-				this.pile.push(this.activePlayer.playCard(playerMove));
-				this.rotate();
+				const { playedCard, duplicates } = this.activePlayer.playCard(playerMove);
+				this.pile.push(playedCard);
+				if (duplicates > 1) {
+					this.details.turn++;
+					this.details.duplicates = true;
+				} else {
+					this.details.duplicates = false;
+					this.rotate();
+				}
 			}
 
 			
@@ -220,9 +240,10 @@ module.exports = class Game {
 		}
 		
 	}
-	moveAllowed(playerMove) {
+moveAllowed(playerMove) {
 		// Needed for legality checks
 		let playerMoveValue;
+		let playerMoveType;
 		let pileType = this.pile[this.pile.length-1]?.['type'];
 		let pileValue = this.pile[this.pile.length-1]?.['value'];
 
@@ -231,8 +252,9 @@ module.exports = class Game {
 			for (let j = 0; j < this.activePlayer.cards[i].length; j++) {
 				// Check that playerMove is from allowed cards (hand, faceup, facedown)
 				if (this.activePlayer.cards[i][j]?.['title'] == playerMove) {
-					// Extract card value for later comparison
+					// Extract card type and value for later comparison
 					playerMoveValue = this.activePlayer.cards[i][j]['value'];
+					playerMoveType = this.activePlayer.cards[i][j]['type'];
 					if (i == 0) {
 						// Always allow cards in hand to be played
 					} else if (i == 1 && this.activePlayer.cards[0].length == 0) {
@@ -242,12 +264,18 @@ module.exports = class Game {
 					} else {
 						return false;
 					}
-
+					// Allow duplicates to be played
+					if (this.details.duplicates == true) {
+						if (pileType == playerMoveType) {
+							return true;
+						} else {
+							return false;
+						}
+					} 
 					// Allow any card to be played on empty pile or a 2
 					if (this.pile.length == 0 || pileType == "2") {
 						return true;
 					}
-
 					// 3 or Joker looks at the previous card, can look past any number of 3s, 2s, and Jokers
 					if (["3", "Joker"].includes(pileType)){
 						let i = 1;
@@ -261,12 +289,14 @@ module.exports = class Game {
 							i++;
 						}
 					}					
-
 					// Seven rule
-					if (pileValue == 7 && playerMoveValue >= 7) {
-						return false;
-					} 
-
+					if (pileValue == 7) {
+						if (playerMoveValue >= 7) {
+							return false;
+						} else {
+							return true;
+						}
+					}
 					// General value rule
 					if (pileValue > playerMoveValue) {
 						return false;
