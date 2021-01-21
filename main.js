@@ -82,11 +82,11 @@ app.post('/begin', (req, res) => {
     res.end();
 });
 
+// Handle Player Actions
 app.post('/gameAction', (req, res) => {
-    // Game logic
     const {roomID, userID, cardData} = req.body;
     const game = rooms[roomID]?.curGame;
-    game.advanceGame(userID, cardData)
+    game.advanceGame(userID, cardData);
     res.end();
 });
 

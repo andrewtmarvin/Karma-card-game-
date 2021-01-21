@@ -84,22 +84,23 @@
             <div class="play-area">
                 <div class="play-area__deck">
                     <h3>deck</h3>
-                    cards remaining: <span id="deckRemaining"></span>
+                    <p>cards remaining: <span class="deck-remaining"></span></p>
                 </div>
                 <div class="play-area__pile">
                     <h3>pile</h3>
                     <div class="play-area__pile-cards"></div>
-                    <a class="card-link pick-up-pile__btn btn" ><p data-card="pickup">Pick Up Pile</p></a>
+                    <a class="other-link pick-up-pile__btn btn" ><p data-card="pickup">Pick Up Pile</p></a>
                 </div>
                 <div class="play-area__burned">
                     <h3>burned</h3>
-                    cards burned: 15
+                    <p>cards burned: <span class="cards-burned"></span></p>
+                    <p>top card: <span class="top-burned-card"></span></p>
                 </div>
                 <button class="btn play-area__btn hidden" id="begin-game">Begin!</button>
             </div>
             <div class='player-area user-space player-1' id='player1'>
                 <div class="player-1__name"></div>
-                <p class="duplicate-or-pass hidden">Play duplicate card or <a class="card-link btn" data-card="pass">pass</a></p>
+                <p class="duplicate-or-pass hidden">Play duplicate card or <a class="other-link btn" data-card="pass">pass</a></p>
                 <div class="player-1__cards">
                     <p>Hand</p>
                     <div class="player-1__hand"></div>

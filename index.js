@@ -171,7 +171,6 @@ const handleGameData = (data) => {
     
     // Each if statement compares local data to incoming data. Updates and takes action if different.
 
-    
     // PLAYER JOINS
     if (players.length != curUsers.length) {
         players = curUsers;
@@ -250,17 +249,32 @@ const handleGameData = (data) => {
 };
 
 const updateCards = (game) => {
-    const { playerCards, opponentsCards, deckRemaining, pile, duplicates, activePlayer } = game;
+    const { playerCards, opponentsCards, deckRemaining, pile, burned, duplicates, activePlayer } = game;
 
     // GAME PLAY AREA SECTION
     // Deck remaining
-    document.getElementById("deckRemaining").innerText = deckRemaining;
+    document.querySelector(".deck-remaining").innerText = deckRemaining;
 
     // Pile
-    document.querySelector(".play-area__pile-cards").innerText = `Top card: ${pile[pile.length-1]?.title || 'pile empty'}`;
+    const topCard = pile[pile.length-1];
+    let pileValueType;
+    // If top of pile is 3 or Joker and it is mirroring cards below
+    if (pile.length > 1 && ["3", "Joker"].includes(topCard?.type)) {
+        // Dig down to find the card being mirrored
+        let i = 1;
+        while (pileValueType == undefined && pile.length >= i) {
+            if (!["3", "Joker"].includes(pile[pile.length - i]['type'])){
+                pileValueType = pile[pile.length - i]['type'];
+            }
+            i++;
+        }
+    }
+    console.log(pileValueType);
+    document.querySelector(".play-area__pile-cards").innerText = `Top card: ${topCard?.title || 'pile empty'}${pileValueType!=undefined?"("+pileValueType+")":""}`;
 
     // Burn
-
+    document.querySelector(".cards-burned").innerText = burned["number"];
+    document.querySelector(".top-burned-card").innerText = burned["topCard"]?.["title"] || "";
 
     // UPDATE PLAYER SECTION
     // Hand
@@ -365,3 +379,16 @@ const updateCards = (game) => {
     }
 
 }
+
+    // Event listeners for other game buttons
+    const allOtherLinks = document.getElementsByClassName('other-link');
+    for (const link of allOtherLinks) {
+        link.addEventListener('click', (e)=>{
+            e.preventDefault();
+            const cardData = e.target.dataset.card;
+            axios.post('/gameAction', {roomID, userID, cardData})
+            .catch(error => {
+                console.log(error);
+            })
+        })
+    };

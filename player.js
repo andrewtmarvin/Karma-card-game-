@@ -13,8 +13,12 @@ module.exports = class Player {
 					const cardType = this.cards[i][j].type;
 					// Don't allow duplicates in face down cards to apply
 					let duplicates = 1;
+					// Don't look in face down cards
 					if (i != 2) {
-						duplicates = this.cards[i].filter(card => card['type'] == cardType).length;
+						// Ignore duplicate 10s because player gets to go again anyways
+						if (this.cards[i][j]?.['type'] != "10") {
+							duplicates = this.cards[i].filter(card => card['type'] == cardType).length;
+						}
 					} 
 
 					return {
@@ -30,8 +34,8 @@ module.exports = class Player {
 		this.cards[0].push(card);
 	}
 
-	pickUpPile () {
-		console.log('a pile is picked up.');
+	pickUpPile (pile) {
+		this.cards[0].push(...pile);
 	}
 
 	swapCards () {
