@@ -215,12 +215,11 @@ module.exports = class Game {
 	}
 
 	advanceGame(userID, playerMove) {
-		console.log(playerMove);
 		if (this.activePlayer['userID'] == userID) {
 			// Short circuit if user is passing instead of playing a duplicate card
 			if (playerMove == "pass") {
-				// Case choosing not to play a second 10
-				if (playerMove.slice(0,2) == "10") {
+				// Case choosing not to play a second 10. Pile empty because just burned
+				if (this.pile.length == 0) {
 					this.details.duplicates = false;
 					// Draw cards before next turn
 					while(this.activePlayer.cards[0].length < 3 && this.deck.length > 0) {
@@ -229,10 +228,13 @@ module.exports = class Game {
 					this.details.turn++;
 					return;
 				} 
+				while(this.activePlayer.cards[0].length < 3 && this.deck.length > 0) {
+					this.activePlayer.drawCard(this.deck.pop());
+				}
 
 				this.rotate();
-				// Skip a player if an 8 is played
-				if (this.pile.slice(-1) == "8") {
+				// Skip a player if an 8 was played, but duplicate 8s were not
+				if (this.pile.slice(-1)[0]['type'] == "8") {
 					this.rotate();
 				}
 				this.details.duplicates = false;
@@ -258,13 +260,9 @@ module.exports = class Game {
 			}
 			if (this.moveAllowed(playerMove)){
 				const res = this.activePlayer.playCard(playerMove);
-				// As soon as a card is played, draw to 3 in hand if possible
-				while(this.activePlayer.cards[0].length < 3 && this.deck.length > 0) {
-					this.activePlayer.drawCard(this.deck.pop());
-				}
-				console.log(res);
 				const { playedCard, duplicates } = res;
 				this.pile.push(playedCard);
+
 				if (playedCard['type'] == "10") {
 					this.burned.push(...this.pile);
 					this.pile = [];
@@ -277,11 +275,37 @@ module.exports = class Game {
 					this.details.duplicates = true;
 					this.details.turn++
 				} else {
+					while(this.activePlayer.cards[0].length < 3 && this.deck.length > 0) {
+						this.activePlayer.drawCard(this.deck.pop());
+					}
 					this.details.duplicates = false;
 					// Reverse game flow if a Joker is played
 					if (playerMove.slice(-5) == "Joker") {
 						this.details.clockwise = !this.details.clockwise;
 					}
+					if (["3", "Joker"].includes(playedCard['type']) && this.pile.length > 1){
+						// Look for and apply power from mirrored Jokers 
+						let i = 2;
+						while (["3", "Joker"].includes(this.pile[this.pile.length - i]['type'])) {
+							// Hit the bottom of the pile, still only 3s and Jokers, return true
+							if (this.pile[this.pile.length-i] == undefined) {
+								break;
+							}
+							if (this.pile[this.pile.length-i]['type'] == "Joker"){
+								this.details.clockwise = !this.details.clockwise;
+							}
+							i++;
+						}
+						// Apply special powers from card that 3 or Joker is mirroring
+						i = 1;
+						while(["3", "Joker"].includes(this.pile[this.pile.length - i]['type'])) {
+							i++;
+						}
+						const mirroredCard = this.pile[this.pile.length-i];
+						if (mirroredCard['type']=="8") {
+							this.rotate();
+						}
+					}	
 					// Do not rotate players if 10 was played
 					if (playedCard['type'] != "10"){
 						this.rotate();
@@ -315,8 +339,10 @@ module.exports = class Game {
 						// Always allow cards in hand to be played
 					} else if (i == 1 && this.activePlayer.cards[0].length == 0) {
 						// Allow face up cards to be played only when hand is empty
+						return true;
 					} else if (i == 2 && this.activePlayer.cards[0].length == 0 && this.activePlayer.cards[1].length == 0) {
 						// Allow face down cards to be played only when hand and face up cards are empty
+						return true;
 					} else {
 						return false;
 					}
@@ -340,10 +366,6 @@ module.exports = class Game {
 							// Hit the bottom of the pile, still only 3s and Jokers, return true
 							if (this.pile[this.pile.length-i] == undefined) {
 								return true;
-							}
-							// Apply Joker power if found
-							if (this.pile[this.pile.length-i].type == "Joker") {
-								this.details.clockwise = !this.details.clockwise;
 							}
 							pileType = this.pile[this.pile.length - i]['type'];
 							pileValue = this.pile[this.pile.length - i]['value'];
