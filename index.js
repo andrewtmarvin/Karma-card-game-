@@ -284,6 +284,16 @@ const updateCards = (game) => {
     playerCards[1].sort(sortCards);
     playerCards[2].sort(sortCards);
 
+    // Add special and wild card classes 
+    const addClasses = (card, element) => {
+        if (["2", "3", "10", "Joker"].includes(card.type)) {
+            element.classList.add("wild");
+        }
+        if (["7", "8"].includes(card.type)) {
+            element.classList.add("special");
+        }
+    }
+
     // Hand
     const playerHand = document.querySelector('.player-1__hand');
     playerHand.innerHTML = "";
@@ -295,6 +305,7 @@ const updateCards = (game) => {
         p.innerText = card['title'];
         p.setAttribute('data-card', card['title']);
         p.classList.add("card");
+        addClasses(card, p);
         link.appendChild(p);
         playerHand.appendChild(link);
     }

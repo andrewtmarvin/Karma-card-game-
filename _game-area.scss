@@ -26,28 +26,29 @@
 	justify-items: center;
 	padding: 1rem;
 	font-size: 2rem;
-
-	&__deck {
+	pointer-events: none;
+	& > * {
 		height: 150px;
 		width: 200px;
+		padding: 2rem;
+	}
+
+	&__deck {
 		background-color: green;
 	}
 	&__pile {
-		height: 150px;
-		width: 200px;
 		background-color: lightseagreen;
 		display: flex;
 		flex-flow: column nowrap;
 	}
 	&__burned {
-		height: 150px;
-		width: 200px;
 		background-color: brown;
 	}
 	&__btn {
 		grid-column: 2 / 3;
 		justify-self: center;
 		align-self: end;
+		pointer-events: all;
 	}
 }
 
@@ -66,6 +67,7 @@
 		padding: 0;
 		background-color: white;
 		z-index: 100;
+		pointer-events: all;
 	}
 }
 
@@ -130,9 +132,9 @@
 		color: black;
 	}
 	&__cards {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		grid-template-rows: auto;
+		display: flex;
+		flex-flow: column wrap;
+		align-items: center;
 		gap: 2rem;
 
 		& > p {
@@ -140,17 +142,12 @@
 			font-weight: 900;
 		}
 	}
-	&__hand {
-		grid-row: 2 / 3;
-		grid-column: 1 / 2;
-	}
-	&__face-up {
-		grid-row: 2 / 3;
-		grid-column: 2 / 3;
-	}
-	&__face-down {
-		grid-row: 2 / 3;
-		grid-column: 3 / 4;
+	&__hand, &__face-up, &__face-down {
+		display: flex;
+		// Player's cards are in anchor tags but opponents are not
+		& a p, & p {
+			margin-right: .5rem;
+		}
 	}
 }
 
@@ -159,5 +156,22 @@
 }
 
 .card {
+	color: black;
+	font-weight: 600;
 	margin-bottom: 2rem;
+	padding: 1rem;
+	background-color: white;
+	text-align: center;
+}
+
+.card-link {
+	text-decoration: none;
+}
+
+.wild {
+	color: goldenrod;
+}
+
+.special {
+	color: brown;
 }

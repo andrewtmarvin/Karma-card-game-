@@ -135,17 +135,20 @@ body {
   justify-items: center;
   padding: 1rem;
   font-size: 2rem;
+  pointer-events: none;
+}
+
+.play-area > * {
+  height: 150px;
+  width: 200px;
+  padding: 2rem;
 }
 
 .play-area__deck {
-  height: 150px;
-  width: 200px;
   background-color: green;
 }
 
 .play-area__pile {
-  height: 150px;
-  width: 200px;
   background-color: lightseagreen;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -157,8 +160,6 @@ body {
 }
 
 .play-area__burned {
-  height: 150px;
-  width: 200px;
   background-color: brown;
 }
 
@@ -171,6 +172,7 @@ body {
   -ms-flex-item-align: end;
       -ms-grid-row-align: end;
       align-self: end;
+  pointer-events: all;
 }
 
 .duplicate-or-pass {
@@ -189,6 +191,7 @@ body {
   padding: 0;
   background-color: white;
   z-index: 100;
+  pointer-events: all;
 }
 
 .player-2 {
@@ -276,12 +279,16 @@ body {
 
 .opponent__cards,
 .player-1__cards {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: (1fr)[3];
-      grid-template-columns: repeat(3, 1fr);
-  -ms-grid-rows: auto;
-      grid-template-rows: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column wrap;
+          flex-flow: column wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: 2rem;
 }
 
@@ -291,34 +298,23 @@ body {
   font-weight: 900;
 }
 
-.opponent__hand,
-.player-1__hand {
-  -ms-grid-row: 2;
-  -ms-grid-row-span: 1;
-  grid-row: 2 / 3;
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 1;
-  grid-column: 1 / 2;
-}
-
-.opponent__face-up,
-.player-1__face-up {
-  -ms-grid-row: 2;
-  -ms-grid-row-span: 1;
-  grid-row: 2 / 3;
-  -ms-grid-column: 2;
-  -ms-grid-column-span: 1;
-  grid-column: 2 / 3;
-}
-
-.opponent__face-down,
+.opponent__hand, .opponent__face-up, .opponent__face-down,
+.player-1__hand,
+.player-1__face-up,
 .player-1__face-down {
-  -ms-grid-row: 2;
-  -ms-grid-row-span: 1;
-  grid-row: 2 / 3;
-  -ms-grid-column: 3;
-  -ms-grid-column-span: 1;
-  grid-column: 3 / 4;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.opponent__hand a p, .opponent__hand p, .opponent__face-up a p, .opponent__face-up p, .opponent__face-down a p, .opponent__face-down p,
+.player-1__hand a p,
+.player-1__hand p,
+.player-1__face-up a p,
+.player-1__face-up p,
+.player-1__face-down a p,
+.player-1__face-down p {
+  margin-right: .5rem;
 }
 
 .active-player {
@@ -326,7 +322,24 @@ body {
 }
 
 .card {
+  color: black;
+  font-weight: 600;
   margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: white;
+  text-align: center;
+}
+
+.card-link {
+  text-decoration: none;
+}
+
+.wild {
+  color: goldenrod;
+}
+
+.special {
+  color: brown;
 }
 
 .game-lobby {
