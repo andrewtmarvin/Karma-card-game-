@@ -321,6 +321,7 @@ const updateCards = (game) => {
         p.innerText = card['title'];
         p.setAttribute('data-card', card['title']);
         p.classList.add("card");
+        addClasses(card, p);
         link.appendChild(p);
         playerFaceUp.appendChild(link);
     }
@@ -382,7 +383,7 @@ const updateCards = (game) => {
             faceUpCard.innerText = card['title'];
             faceUpCard.setAttribute('data-card', card['title']);
             faceUpCard.classList.add("card");
-
+            addClasses(card, faceUpCard);
             opponentFaceUp.appendChild(faceUpCard);
         }
         
