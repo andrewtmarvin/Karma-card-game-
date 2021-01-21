@@ -269,7 +269,6 @@ const updateCards = (game) => {
             i++;
         }
     }
-    console.log(pileValueType);
     document.querySelector(".play-area__pile-cards").innerText = `Top card: ${topCard?.title || 'pile empty'}${pileValueType!=undefined?"("+pileValueType+")":""}`;
 
     // Burn
@@ -277,6 +276,14 @@ const updateCards = (game) => {
     document.querySelector(".top-burned-card").innerText = burned["topCard"]?.["title"] || "";
 
     // UPDATE PLAYER SECTION
+    // Sort hand and face up cards
+    const sortCards = (a,b) => {
+        let sortOrder = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace', 'Joker'];
+        return sortOrder.indexOf(a.type) - sortOrder.indexOf(b.type);
+    }
+    playerCards[1].sort(sortCards);
+    playerCards[2].sort(sortCards);
+
     // Hand
     const playerHand = document.querySelector('.player-1__hand');
     playerHand.innerHTML = "";
