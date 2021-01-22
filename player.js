@@ -22,7 +22,7 @@ module.exports = class Player {
 					} 
 
 					return {
-						'playedCard': this.cards[i].splice(j, 1)[0],
+						playedCard: this.cards[i].splice(j, 1)[0],
 						duplicates
 					}
 				}
