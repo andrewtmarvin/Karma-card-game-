@@ -269,8 +269,8 @@ const updateCards = (game) => {
             i++;
         }
     }
-    document.querySelector(".play-area__pile-cards").innerText = `Top card: ${topCard?.title || 'pile empty'}${pileValueType!=undefined?"("+pileValueType+")":""}`;
-
+    document.querySelector(".play-area__pile-cards").innerText = `Top: ${topCard?.title || ''}${pileValueType!=undefined?"("+pileValueType+")":""}`;
+    document.querySelector(".pick-up-pile__btn p span").innerText = `${pile.length > 0 ? "("+ pile.length + ")" : ""}`
     // Burn
     document.querySelector(".cards-burned").innerText = burned["number"];
     document.querySelector(".top-burned-card").innerText = burned["topCard"]?.["title"] || "";
