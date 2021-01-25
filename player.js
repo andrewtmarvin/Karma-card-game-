@@ -3,6 +3,8 @@ module.exports = class Player {
 		this.userID = user[0];
 		this.name = user[1];
 		this.cards = [ [], [], [] ];
+		this.cardSwapFinished = false;
+		this.cardToSwap = null;
 	}
 
 	playCard (playerMove) {
@@ -38,7 +40,27 @@ module.exports = class Player {
 		this.cards[0].push(...pile);
 	}
 
-	swapCards () {
-		console.log('cards are swapped.');
+	swapCards (cardTitle) {
+		console.log("looking for ", cardTitle);
+		for (let i = 0; i < 2; i++){
+			for (let j = 0; j < 3; j++) {
+				if (this.cards[i][j]?.['title'] == cardTitle) {
+					if (this.cardToSwap == null) {
+						this.cardToSwap = this.cards[i][j];
+					} else {
+						for(let k = 0; k < 2; k++) {
+							for (let l = 0; l < 3; l++) {
+								if (this.cards[k][l]?.['title'] == this.cardToSwap['title']) {
+									this.cards[k][l] = this.cards[i][j];
+									this.cards[i][j] = this.cardToSwap;
+									console.log(this.cards);
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }

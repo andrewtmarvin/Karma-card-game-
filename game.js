@@ -14,6 +14,7 @@ module.exports = class Game {
 		this.rotation = [];
 		this.activePlayer = null;
 		this.details = {
+			cardSwap: true,
 			clockwise : true,
 			turn : 0,
 			duplicates : false,
@@ -58,23 +59,22 @@ module.exports = class Game {
 		});
 	}
 
-	allowCardSwap () {
-		this.players.forEach((player) => {
-			console.log(`${player.name}'s cards:`);
-			let x = '';
-			player.cards[0].forEach((card) => (x += card.type + ' '));
-			console.log(x);
-			x = '';
-			// console.log(`${player.name}'s face up cards:`);
-			player.cards[1].forEach((card) => (x += card.type + ' '));
-			console.log(x);
+	cardSwap (userID, card) {
+		const swappingPlayer = this.players.filter(player=> player.userID == userID)[0];
 
-			// if (prompt('want to swap?') === 'yes') {
-			// 	player.swapCards();
-			// } else {
-			// 	console.log('a card is not swapped.');
-			// }
-		});
+		if (card != "done") {
+			swappingPlayer.swapCards(card);
+		} else {
+			swappingPlayer.cardSwapFinished = true;
+			// End card swap and begin game if all players have finished
+			for(const player of this.players) {
+				if (player.cardSwapFinished == false) {
+					return;
+				}
+			}
+			this.details.cardSwap = false;
+			this.turn++;
+		}
 	}
 
 	gameBegin () {
@@ -184,7 +184,8 @@ module.exports = class Game {
 			gameStarted: this.details.gameStarted,
 			gameOver: this.details.gameOver,
 			turn: this.details.turn,
-			duplicates: this.details.duplicates
+			duplicates: this.details.duplicates,
+			cardSwap: this.details.cardSwap
         };
 	}
 

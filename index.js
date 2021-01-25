@@ -249,7 +249,7 @@ const handleGameData = (data) => {
 };
 
 const updateCards = (game) => {
-    const { playerCards, opponentsCards, deckRemaining, pile, burned, duplicates, activePlayer } = game;
+    const { playerCards, opponentsCards, deckRemaining, pile, burned, duplicates, cardSwap, activePlayer } = game;
 
     // GAME PLAY AREA SECTION
     // Deck remaining
@@ -397,6 +397,12 @@ const updateCards = (game) => {
         opponentFaceDown.appendChild(faceDownCards);
     }
 
+    // Card swap button
+    if (cardSwap == true) {
+        document.querySelector(".card-swap").classList.remove('hidden');
+    } else {
+        document.querySelector(".card-swap").classList.add('hidden');
+    }
 }
 
     // Event listeners for other game buttons
@@ -405,6 +411,7 @@ const updateCards = (game) => {
         link.addEventListener('click', (e)=>{
             e.preventDefault();
             const cardData = e.target.dataset.card;
+            console.log(cardData);
             axios.post('/gameAction', {roomID, userID, cardData})
             .catch(error => {
                 console.log(error);

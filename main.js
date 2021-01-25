@@ -86,7 +86,11 @@ app.post('/begin', (req, res) => {
 app.post('/gameAction', (req, res) => {
     const {roomID, userID, cardData} = req.body;
     const game = rooms[roomID]?.curGame;
-    game.advanceGame(userID, cardData);
+    if (game.details.cardSwap == true) {
+        game.cardSwap(userID, cardData);
+    } else {
+        game.advanceGame(userID, cardData);
+    }
     res.end();
 });
 

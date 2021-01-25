@@ -28,7 +28,6 @@ module.exports = class Room {
         this.curGame.makeDeck();
         this.curGame.shuffleDeck();
         this.curGame.dealCards();
-        // this.curGame.allowCardSwap();
         
         // Game start
         this.curGame.gameBegin();
