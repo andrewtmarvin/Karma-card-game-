@@ -41,7 +41,6 @@ module.exports = class Player {
 	}
 
 	swapCards (cardTitle) {
-		console.log("looking for ", cardTitle);
 		for (let i = 0; i < 2; i++){
 			for (let j = 0; j < 3; j++) {
 				if (this.cards[i][j]?.['title'] == cardTitle) {
@@ -50,15 +49,16 @@ module.exports = class Player {
 					} else {
 						for(let k = 0; k < 2; k++) {
 							for (let l = 0; l < 3; l++) {
-								if (this.cards[k][l]?.['title'] == this.cardToSwap['title']) {
+								if (this.cards[k][l]['title'] == this.cardToSwap['title']) {
 									this.cards[k][l] = this.cards[i][j];
 									this.cards[i][j] = this.cardToSwap;
-									console.log(this.cards);
-									break;
+									this.cardToSwap = null;
+									return;
 								}
 							}
 						}
 					}
+					return;
 				}
 			}
 		}

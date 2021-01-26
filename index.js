@@ -31,9 +31,7 @@ nameForm.addEventListener('submit', (e) => {
         nameForm.classList.add('hidden');
         startLobbyStatusPing();
     })
-    .catch(error => {
-        console.log("failed to set up room"+ error);
-    })
+    .catch(error => console.log(error));
 });
 
 // HOST GAME BUTTON
@@ -108,9 +106,7 @@ const startLobbyStatusPing = () => {
                                 console.log("room is full");
                             }
                         })
-                        .catch(error => {
-                            console.log(error);
-                        })
+                        .catch(error => console.log(error));
                     })
                 };
             } else {
@@ -119,9 +115,7 @@ const startLobbyStatusPing = () => {
                 openGames.appendChild(p);
             }
         })
-        .catch(error => {
-            console.log(error);
-        })
+        .catch(error => console.log(error));
     }, 500);
 }
 
@@ -150,9 +144,7 @@ const startRoomStatusPing = () => {
                 handleGameData(res.data);
             }
         })
-        .catch(error => {
-            console.log(error);
-        })
+        .catch(error => console.log(error));
     }, 500);
 }
 
@@ -234,7 +226,6 @@ const handleGameData = (data) => {
 
     // GAME ENDS
     if (game != undefined && curGame?.gameOver == true) {
-        console.log("a game is ended");
         clearInterval(gameIntervalKey);
         // Need to give option to play again. Would be nice if players from lobby could join in between games
         // showLobby();
@@ -242,7 +233,6 @@ const handleGameData = (data) => {
 
     // NEW LOSER
     if (loser != prevLoser) {
-        console.log("updated prevLoser");
         loser = prevLoser;
     }
     
@@ -348,9 +338,7 @@ const updateCards = (game) => {
             e.preventDefault();
             const cardData = e.target.dataset.card;
             axios.post('/gameAction', {roomID, userID, cardData})
-            .catch(error => {
-                console.log(error);
-            })
+            .catch(error => console.log(error));
         })
     };
 
@@ -411,10 +399,7 @@ const updateCards = (game) => {
         link.addEventListener('click', (e)=>{
             e.preventDefault();
             const cardData = e.target.dataset.card;
-            console.log(cardData);
             axios.post('/gameAction', {roomID, userID, cardData})
-            .catch(error => {
-                console.log(error);
-            })
+            .catch(error => console.log(error));
         })
     };

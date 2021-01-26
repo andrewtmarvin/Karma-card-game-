@@ -60,6 +60,7 @@ module.exports = class Game {
 	}
 
 	cardSwap (userID, card) {
+		this.details.turn++;
 		const swappingPlayer = this.players.filter(player=> player.userID == userID)[0];
 
 		if (card != "done") {
@@ -73,7 +74,6 @@ module.exports = class Game {
 				}
 			}
 			this.details.cardSwap = false;
-			this.turn++;
 		}
 	}
 
@@ -447,8 +447,8 @@ module.exports = class Game {
 		}
 		burnCardCount = handCount + pileCount;
 		if (burnCardCount == 4) {
+			// Player burns out of turn
 			if (this.activePlayer.userID != userID) {
-				console.log("player burned out of turn");
 				// Put cards on pile then burn
 				for (let i = 0; i < burnAttemptPlayer.cards[handOrFaceUp].length; i++ ) {
 					if (burnAttemptPlayer.cards[handOrFaceUp][i].type == burnAttemptType) {
