@@ -332,6 +332,7 @@ body {
 
 .card-link {
   text-decoration: none;
+  -webkit-user-drag: none;
 }
 
 .wild {

@@ -170,6 +170,10 @@ module.exports = class Game {
 				opponent.cards[2].length
 			])
 		});
+		const playersFinishedStatus = {};
+		this.players.forEach( player => {
+			playersFinishedStatus[player.userID] = player.outOfCards;
+		});
 		return {
 			// Only give player their hand, all face up cards on board, and number of face down cards
 			playerCards: [userID].concat(thisPlayer.cards.slice(0,2)).concat(thisPlayer.cards[2].length),
@@ -185,7 +189,8 @@ module.exports = class Game {
 			gameOver: this.details.gameOver,
 			turn: this.details.turn,
 			duplicates: this.details.duplicates,
-			cardSwap: this.details.cardSwap
+			cardSwap: this.details.cardSwap,
+			playersFinishedStatus
         };
 	}
 
@@ -193,14 +198,18 @@ module.exports = class Game {
 		while(this.activePlayer.cards[0].length < 3 && this.deck.length > 0) {
 			this.activePlayer.drawCard(this.deck.pop());
 		}
+
+				
 		if (this.details.clockwise) {
-			this.rotation.push(this.rotation.shift());
+			// Remove player from rotation if out of cards, otherwise just rotate
+			this.activePlayer.outOfCards ? this.rotation.shift() : this.rotation.push(this.rotation.shift());
 			this.activePlayer = this.rotation [0];
 		} else {
-			this.rotation.unshift(this.rotation.pop());
+			this.activePlayer.outOfCards ? this.rotation.shift() : this.rotation.unshift(this.rotation.pop());
 			this.activePlayer = this.rotation[0];
 		}
 		this.details.turn++;
+
 	}
 
 	// Jump to the player who is starting the game, or the player who burns the pile out of turn
@@ -208,10 +217,16 @@ module.exports = class Game {
 		while (this.rotation[0]['userID'] != userID) {
 			this.rotation.unshift(this.rotation.pop());
 		}
+
 		this.activePlayer = this.rotation[0];
+		
 		while(this.activePlayer.cards[0].length < 3 && this.deck.length > 0) {
 			this.activePlayer.drawCard(this.deck.pop());
 		}
+
+		// Remove player from rotation if out of cards
+		if ( this.activePlayer.outOfCards ) this.rotation.shift();
+		
 		this.details.turn++;
 	}
 
@@ -418,6 +433,9 @@ module.exports = class Game {
 				break;
 			}
 		}
+		// If card coming from facedown, but still cards in hand -> illegal move return false
+		if (handOrFaceUp == 1 && burnAttemptPlayer.cards[0].length > 0) return false;
+
 		// Only look in face up cards if hand empty and card not found yet
 		if (burnAttemptPlayer.cards[0].length == 0 && burnAttemptType == null) {
 			for (const card of burnAttemptPlayer.cards[1]){
@@ -430,7 +448,6 @@ module.exports = class Game {
 		}
 
 		let handCount = 0;
-		console.log(burnAttemptPlayer.cards[handOrFaceUp]);
 		for (let i = 0; i < burnAttemptPlayer.cards[handOrFaceUp].length; i++ ) {
 			if (burnAttemptPlayer.cards[handOrFaceUp][i].type == burnAttemptType) {
 				handCount++;

@@ -5,6 +5,7 @@ module.exports = class Player {
 		this.cards = [ [], [], [] ];
 		this.cardSwapFinished = false;
 		this.cardToSwap = null;
+		this.outOfCards = false;
 	}
 
 	playCard (playerMove) {
@@ -22,7 +23,9 @@ module.exports = class Player {
 							duplicates = this.cards[i].filter(card => card['type'] == cardType).length;
 						}
 					} 
-
+					// Player out of cards status
+					this.cards[0].length == 0 && this.cards[2].length == 0 ? this.outOfCards = true: this.outOfCards = false;
+					// Return played card as well as duplicates status
 					return {
 						playedCard: this.cards[i].splice(j, 1)[0],
 						duplicates
@@ -34,10 +37,14 @@ module.exports = class Player {
 
 	drawCard (card) {
 		this.cards[0].push(card);
+		// Player out of cards status
+		this.outOfCards = false;
 	}
 
 	pickUpPile (pile) {
 		this.cards[0].push(...pile);
+		// Player out of cards status
+		this.outOfCards = false;
 	}
 
 	swapCards (cardTitle) {
