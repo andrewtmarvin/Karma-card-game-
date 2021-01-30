@@ -198,7 +198,6 @@ module.exports = class Game {
 		while(this.activePlayer.cards[0].length < 3 && this.deck.length > 0) {
 			this.activePlayer.drawCard(this.deck.pop());
 		}
-
 				
 		if (this.details.clockwise) {
 			// Remove player from rotation if out of cards, otherwise just rotate
@@ -209,7 +208,6 @@ module.exports = class Game {
 			this.activePlayer = this.rotation[0];
 		}
 		this.details.turn++;
-
 	}
 
 	// Jump to the player who is starting the game, or the player who burns the pile out of turn
@@ -411,7 +409,7 @@ module.exports = class Game {
 	}
 
 	checkBurn (userID, playerMove){
-		if (playerMove == "pass" || playerMove == "pickup" || playerMove.slice(4,8) == "Down") {
+		if (playerMove == "pass" || playerMove == "pickup" || playerMove.slice(4,8) == "Down" || playerMove.slice(-5) == "Joker") {
 			return false;
 		}
 		// Check for 4 card burn from any player

@@ -23,11 +23,14 @@ module.exports = class Player {
 							duplicates = this.cards[i].filter(card => card['type'] == cardType).length;
 						}
 					} 
+					const playedCard = this.cards[i].splice(j, 1)[0];
+
 					// Player out of cards status
-					this.cards[0].length == 0 && this.cards[2].length == 0 ? this.outOfCards = true: this.outOfCards = false;
+					this.cards[0].length == 0 && this.cards[2].length == 0 ? this.outOfCards = true : this.outOfCards = false;
+					
 					// Return played card as well as duplicates status
 					return {
-						playedCard: this.cards[i].splice(j, 1)[0],
+						playedCard,
 						duplicates
 					}
 				}
