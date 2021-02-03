@@ -285,7 +285,7 @@ module.exports = class Game {
 				playerMove = this.activePlayer.cards[2][cardIndex].title;
 			}
 			const {moveAllowed, faceUpOrDownCard} = this.moveAllowed(playerMove);
-			console.log(moveAllowed, faceUpOrDownCard);
+			console.log(`move allowed: ${moveAllowed}, faceupordown: ${faceUpOrDownCard}`);
 			if (moveAllowed || faceUpOrDownCard){
 				const res = this.activePlayer.playCard(playerMove);
 				const { playedCard, duplicates } = res;
@@ -315,7 +315,7 @@ module.exports = class Game {
 					}
 					this.details.duplicates = false;
 					// Reverse game flow if a Joker is played
-					if (playerMove.slice(-5) == "Joker") {
+					if (playerMove.split(" ")[0] == "Joker") {
 						this.details.clockwise = !this.details.clockwise;
 					}
 					// 3 or a Joker was played, but then duplicates were not
@@ -409,7 +409,7 @@ module.exports = class Game {
 	}
 
 	checkBurn (userID, playerMove){
-		if (playerMove == "pass" || playerMove == "pickup" || playerMove.slice(4,8) == "Down" || playerMove.slice(-5) == "Joker") {
+		if (playerMove == "pass" || playerMove == "pickup" || playerMove.slice(4,8) == "Down" || playerMove.split(" ")[0] == "Joker") {
 			return false;
 		}
 		// Check for 4 card burn from any player
@@ -477,7 +477,6 @@ module.exports = class Game {
 
 			// If active player is burning, only burn when they've put them all in the pile (1 left in their hand) so that burning is optional
 			} else if (pileCount == 3) {
-				console.log("player burned");
 				// Put cards on pile then burn
 				for (let i = 0; i < burnAttemptPlayer.cards[handOrFaceUp].length; i++ ) {
 					if (burnAttemptPlayer.cards[handOrFaceUp][i].type == burnAttemptType) {

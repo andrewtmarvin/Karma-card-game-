@@ -20,7 +20,7 @@ module.exports = class Card {
 		if (this.type !== 'Joker') {
 			return `${this.type} of ${this.suit}`;
 		} else {
-			return `${this.suit} ${this.type}`;
+			return `${this.type} ${this.suit}`;
 		}
 	}
 }
