@@ -202,11 +202,18 @@ module.exports = class Game {
 		if (this.details.clockwise) {
 			// Remove player from rotation if out of cards, otherwise just rotate
 			this.activePlayer.outOfCards ? this.rotation.shift() : this.rotation.push(this.rotation.shift());
-			this.activePlayer = this.rotation [0];
+			this.activePlayer = this.rotation[0];
+			if (this.rotation.length == 1) {
+				this.details.gameOver = true;
+			}
 		} else {
 			this.activePlayer.outOfCards ? this.rotation.shift() : this.rotation.unshift(this.rotation.pop());
 			this.activePlayer = this.rotation[0];
+			if (this.rotation.length == 1) {
+				this.details.gameOver = true;
+			}
 		}
+
 		this.details.turn++;
 	}
 
@@ -223,11 +230,18 @@ module.exports = class Game {
 		}
 
 		// Remove player from rotation if out of cards
-		if ( this.activePlayer.outOfCards ) this.rotation.shift();
+		if ( this.activePlayer.outOfCards ) {
+			this.rotation.shift();
+			this.activePlayer = this.rotation[0];
+			if (this.rotation.length == 1) {
+				this.details.gameOver = true;
+			}
+		}
 		
 		this.details.turn++;
 	}
 
+	// Main game logic
 	advanceGame(userID, playerMove) {
 		// Check if burn possible. Any player may complete burn of 4, but only activePlayer may do so using only hand cards
 		if (this.checkBurn(userID, playerMove)) {
@@ -294,6 +308,7 @@ module.exports = class Game {
 				// Face up or down card illegal move, played and then pile picked up
 				if(faceUpOrDownCard && !moveAllowed) {
 					this.activePlayer.cards[0].push(...this.pile);
+					this.activePlayer.outOfCards = false;
 					this.pile=[];
 					this.rotate();
 					return;
@@ -304,6 +319,8 @@ module.exports = class Game {
 					while(this.activePlayer.cards[0].length < 3 && this.deck.length > 0) {
 						this.activePlayer.drawCard(this.deck.pop());
 					}
+					// Edge case 10 played as final card, rotate to remove player from game
+					if (this.activePlayer.outOfCards) this.rotate();
 					this.details.turn++
 				}
 				if (duplicates > 1) {
@@ -335,6 +352,7 @@ module.exports = class Game {
 		}
 	}
 
+	// Check if move is allowed
 	moveAllowed(playerMove) {
 		// Needed for legality checks
 		let playerMoveValue;
@@ -408,6 +426,7 @@ module.exports = class Game {
 		return {moveAllowed:true, faceUpOrDownCard};
 	}
 
+	// Check if attempted move will result in a burn
 	checkBurn (userID, playerMove){
 		if (playerMove == "pass" || playerMove == "pickup" || playerMove.slice(4,8) == "Down" || playerMove.split(" ")[0] == "Joker") {
 			return false;
