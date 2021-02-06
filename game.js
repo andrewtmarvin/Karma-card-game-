@@ -170,9 +170,9 @@ module.exports = class Game {
 				opponent.cards[2].length
 			])
 		});
-		const playersFinishedStatus = {};
+		const playersOutOfCardsStatus = {};
 		this.players.forEach( player => {
-			playersFinishedStatus[player.userID] = player.outOfCards;
+			playersOutOfCardsStatus[player.userID] = player.outOfCards;
 		});
 		return {
 			// Only give player their hand, all face up cards on board, and number of face down cards
@@ -190,7 +190,7 @@ module.exports = class Game {
 			turn: this.details.turn,
 			duplicates: this.details.duplicates,
 			cardSwap: this.details.cardSwap,
-			playersFinishedStatus
+			playersOutOfCardsStatus
         };
 	}
 
@@ -299,7 +299,7 @@ module.exports = class Game {
 				playerMove = this.activePlayer.cards[2][cardIndex].title;
 			}
 			const {moveAllowed, faceUpOrDownCard} = this.moveAllowed(playerMove);
-			console.log(`move allowed: ${moveAllowed}, faceupordown: ${faceUpOrDownCard}`);
+			// console.log(`move allowed: ${moveAllowed}, faceupordown: ${faceUpOrDownCard}`);
 			if (moveAllowed || faceUpOrDownCard){
 				const res = this.activePlayer.playCard(playerMove);
 				const { playedCard, duplicates } = res;
@@ -427,7 +427,7 @@ module.exports = class Game {
 	}
 
 	// Check if attempted move will result in a burn
-	checkBurn (userID, playerMove){
+	checkBurn (userID, playerMove = "pass"){
 		if (playerMove == "pass" || playerMove == "pickup" || playerMove.slice(4,8) == "Down" || playerMove.split(" ")[0] == "Joker") {
 			return false;
 		}
@@ -450,9 +450,7 @@ module.exports = class Game {
 				break;
 			}
 		}
-		// If card coming from facedown, but still cards in hand -> illegal move return false
-		if (handOrFaceUp == 1 && burnAttemptPlayer.cards[0].length > 0) return false;
-
+		
 		// Only look in face up cards if hand empty and card not found yet
 		if (burnAttemptPlayer.cards[0].length == 0 && burnAttemptType == null) {
 			for (const card of burnAttemptPlayer.cards[1]){
@@ -463,29 +461,35 @@ module.exports = class Game {
 				}
 			}
 		}
+		
+		// If card coming from facedown, but still cards in hand -> illegal move return false
+		if (handOrFaceUp == 1 && burnAttemptPlayer.cards[0].length > 0) return false;
 
-		let handCount = 0;
-		for (let i = 0; i < burnAttemptPlayer.cards[handOrFaceUp].length; i++ ) {
+		let playerBurnCardCount = 0;
+		for (let i = 0; i < burnAttemptPlayer.cards[handOrFaceUp]?.length; i++ ) {
 			if (burnAttemptPlayer.cards[handOrFaceUp][i].type == burnAttemptType) {
-				handCount++;
+				playerBurnCardCount++;
 			}
 		}
 
-		let pileCount = 0;
+		let pileBurnCardCount = 0;
 		if (this.pile.length > 0) {
-			for (let i = 0; i < this.pile.length; i ++ ) {
+			for (let i = this.pile.length-1; i >= 0; i-- ) {
 				if (this.pile[i].type == burnAttemptType) {
-					pileCount++;
+					pileBurnCardCount++;
+				} else {
+					break;
 				}
 			}
 		}
-		burnCardCount = handCount + pileCount;
+		burnCardCount = playerBurnCardCount + pileBurnCardCount;
 		if (burnCardCount == 4) {
 			// Player burns out of turn
 			if (this.activePlayer.userID != userID) {
 				// Put cards on pile then burn
-				for (let i = 0; i < burnAttemptPlayer.cards[handOrFaceUp].length; i++ ) {
-					if (burnAttemptPlayer.cards[handOrFaceUp][i].type == burnAttemptType) {
+				let cardsLength = burnAttemptPlayer.cards[handOrFaceUp].length;
+				for (let i = 0; i < cardsLength; i++ ) {
+					if (burnAttemptPlayer.cards[handOrFaceUp][i]?.type == burnAttemptType) {
 						this.pile.push(burnAttemptPlayer.cards[handOrFaceUp].splice(i, 1)[0]);
 					}
 				}
@@ -495,10 +499,11 @@ module.exports = class Game {
 				return true;
 
 			// If active player is burning, only burn when they've put them all in the pile (1 left in their hand) so that burning is optional
-			} else if (pileCount == 3) {
+			} else if (pileBurnCardCount == 3) {
 				// Put cards on pile then burn
-				for (let i = 0; i < burnAttemptPlayer.cards[handOrFaceUp].length; i++ ) {
-					if (burnAttemptPlayer.cards[handOrFaceUp][i].type == burnAttemptType) {
+				let cardsLength = burnAttemptPlayer.cards[handOrFaceUp].length;
+				for (let i = 0; i < cardsLength; i++ ) {
+					if (burnAttemptPlayer.cards[handOrFaceUp][i]?.type == burnAttemptType) {
 						this.pile.push(burnAttemptPlayer.cards[handOrFaceUp].splice(i, 1)[0]);
 					}
 				}

@@ -239,7 +239,7 @@ const handleGameData = (data) => {
 };
 
 const updateCards = (game) => {
-    const { playerCards, opponentsCards, deckRemaining, pile, burned, duplicates, cardSwap, activePlayer, playersFinishedStatus } = game;
+    const { playerCards, opponentsCards, deckRemaining, pile, burned, duplicates, cardSwap, activePlayer, playersOutOfCardsStatus } = game;
 
     // GAME PLAY AREA SECTION
     // Deck remaining

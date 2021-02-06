@@ -29,6 +29,7 @@ module.exports = class Player {
 					this.cards[0].length == 0 && this.cards[2].length == 0 ? this.outOfCards = true : this.outOfCards = false;
 					
 					// Return played card as well as duplicates status
+					console.log(this.userID + " played " +playedCard.title)
 					return {
 						playedCard,
 						duplicates
@@ -48,6 +49,7 @@ module.exports = class Player {
 		this.cards[0].push(...pile);
 		// Player out of cards status
 		this.outOfCards = false;
+		console.log(this.userID + " picked up pile")
 	}
 
 	swapCards (cardTitle) {
